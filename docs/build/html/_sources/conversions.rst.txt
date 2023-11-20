@@ -1,0 +1,80 @@
+========================================
+Conversion of BioC formatted annotations
+========================================
+
+There are different ways to extract and convert the annotations in a BioC XML
+file. For training and to calculate performance stats, we convereted the
+annotations and the relevant sentences to IOB/BIO format. Additionally, we
+provide commandline tools that allow the conversion of annotations and relevant
+sentences to tab-separated CSV and JSON dictionary.
+
+Conversion to IOB for training
+------------------------------
+
+In order to create annotations in IOB formatting ready for training a NER model
+the annotated BioC XML files were converted with our corresponding commandline
+tool. This iterates over all blocks of text in a passage/paragraph in the XML
+file and extracts the relevant sentences and their respective annotations. The
+input for the script is a pointer to a directory containing annotated BioC XML
+files. The output of the tool will be four different files. A combined file
+for all the documents in the input directory will be created as "all.tsv".
+Additionally, there are three files for training prepared, "train.tsv" providing
+a training set, "dev.tsv" providing a development set used during training and
+"test.tsv" a final testing set.
+
+
+**Example**
+
+.. code-block:: bash
+
+    ner_for_protein_structures.process_bioc_xml_for_training --bioc-xml-dir=test/data/annotated_BioC_XML/ --output-dir=test/results/IOB_for_training/
+
+
+Conversion to IOB to calculate performance statistics
+-----------------------------------------------------
+
+To be able to judge the performance of the trained model we used the SemEval
+evaluation procedure as published here `SemEval <https://aclanthology.org/S13-2056.pdf>`_.
+Each predicted annotation was assessed whether it had a matching annotation in
+the ground truth and whether this match was *"correct"*, *"incorrect"*, *"partial"*,
+*"missing"* or *"spurious"*. SemEval then evaluated a found match whether it
+belonged to one of four different classes of matches: *"strict"*, *"exact"*,
+*"partial"* or *"type"*. *"Strict"* evaluation expected a perfect match between
+span boundaries and the annotated entity type. For an *"exact"* match
+the span boundaries are expected to be identical but the entity type for the
+span was ignored. If only part of the text spans matched, then an annotation
+was evaluated as *"partial"* and the entity type was ignored. A *"type"* match
+required some overlap between the predicted and the ground truth annotation.
+For each class of match the precision, recall and F1 measure were determined.
+The statistics were calculated for the selected sections title, abstract,
+introduction, results, discussion, tables as well as table and figure captions.
+
+The tool can be run in two ways. By specifying an annotator name as string
+through the parameter "annotator", one can extract annotations created by a
+specific annotator. This is useful if analysing the performance of the
+different annotators. If no annotator is specified, then the tool defaults
+to "None" for this parameter, and therefore all annotations are used and a
+single annotator for the document is assumed.
+
+**Example**
+
+Specifying an annotator
+
+.. code-block:: bash
+
+    ner_for_protein_structures.process_bioc_xml_for_performance_stats --bioc-xml-dir=test/data/annotated_BioC_XML/ --output-dir=test/results/IOB_for_performance_stats_w_annotator/ --annotator="melaniev@ebi.ac.uk"
+
+
+Not specifying an annotator
+
+.. code-block:: bash
+
+    ner_for_protein_structures.process_bioc_xml_for_performance_stats --bioc-xml-dir=test/data/annotated_BioC_XML/ --output-dir=test/results/IOB_for_performance_stats_wo_annotator/
+
+
+Conversion of annotations and respective sentences to JSON
+----------------------------------------------------------
+
+
+Conversion of annotations and respective sentences to CSV
+---------------------------------------------------------

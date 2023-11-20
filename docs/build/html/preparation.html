@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Preparation &#8212; ner_for_protein_structures 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="conversions.html" />
+    <link rel="prev" title="Getting Started" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="data-preparation">
+<h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading">¶</a></h1>
+<p>## Prepare some data</p>
+<p>The scripts are based on BioC formatted XML versions of scientific publications.
+Details about the BioC format can be found here:</p>
+<p>It is also assumed that the annotations have been created by either manual
+annotation using TeamTat (<a class="reference external" href="https://www.teamtat.org/">https://www.teamtat.org/</a>) and downloaded as BioC XML
+or they have been predicted using one of the four models that have been
+developed and are described in the associated publication.</p>
+<p>## Downloading BioC XML files from an open access collection
+For any scientific publication that may contain structural information and that
+is open access, one can download a BioC formatted XML version through an FTP
+service provided by the National Center for Biotechnology Information (NCBI).
+The site can be found here:
+<a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/tools/ftp/">https://www.ncbi.nlm.nih.gov/pmc/tools/ftp/</a></p>
+<p>All the documents available via this service are identified by their unique
+PubMedCentral IDs.</p>
+<p>We provide a small commandline tool that will fetch any open access publications
+in BioC XML from this FTP site given a list of PubMedCentral IDs. PubMedCentral
+IDs are constructed of a 3-letter source identifier “PMC” and a multi-digit
+numerical part, e.g. “PMC4784909”. The example here refers to the publication
+<a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4784909/">The Structural Basis of Coenzyme A Recycling in a Bacterial Organelle</a>. The downloaded files will be named <cite>“&lt;date&gt;_xml_&lt;unique PMC ID&gt;.xml”</cite></p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.get_bioc_xml_from_pmc<span class="w"> </span>--pmcid-list<span class="o">=</span>test/data/pmcid_list_for_ftp_retrieval.txt<span class="w"> </span>--output-dir<span class="o">=</span>test/results/BioC_XML_from_FTP/
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ner_for_protein_structures</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Getting Started</a></li>
+      <li>Next: <a href="conversions.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Melanie Vollmar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/preparation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
