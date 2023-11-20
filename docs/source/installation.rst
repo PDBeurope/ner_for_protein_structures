@@ -14,11 +14,11 @@ TeamTat (https://www.teamtat.org/), into other formats.
 Installation
 ------------
 
-Clone the repository from the `source code <https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git>`_ on Github:
+Clone the repository from the `source code <git@github.com:PDBeurope/ner_for_protein_structures.git>`_ on Github:
 
 .. code-block:: bash
 
-    git clone https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git
+    git clone git@github.com:PDBeurope/ner_for_protein_structures.git
 
 
 
