@@ -47,8 +47,8 @@ pip install .
 ## Downloading models
 
 The different available models, their performance stats and download links are
-given in section :ref:`models`. Huggingface supports git and all models can
-simply be downloaded through "git clone", see example below.
+given in section "Models" of the documentation. Huggingface supports git and all
+models can simply be downloaded through "git clone", see example below.
 
 ```bash
 
