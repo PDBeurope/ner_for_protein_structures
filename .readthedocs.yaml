@@ -7,9 +7,9 @@ version: 2
 
 # Set the OS, Python version and other tools you might need
 build:
-  os: Sonoma 14.1.1
+  os: ubuntu-20.04
   tools:
-    python: "3.9.12"
+    python: "3.12"
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
