@@ -11,23 +11,23 @@ Available models
 ----------------
 
 Currently, November 2023, there are five models available for this project.
-Four are based on the pre-trained algorithm PubmedBERT from 
-`Microsoft <https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext>`_
+Four are based on the pre-trained algorithm `PubmedBERT from 
+Microsoft <https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext>`_
 and one is based on `Bioformer 8L <https://huggingface.co/bioformers/bioformer-8L>`_,
 which is much smaller than the PubMed BERT model but with comparable performance.
 
 The different models have been benchmarked with an independent set of 10
 publications.
 
-================ ================================================================================= ================ ============
-model            Huggingface link                                                                  no. entity types size on disk
-================ ================================================================================= ================ ============
-PubmedBERT v1.2  `https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v1.2`               19     872.1 MB
-PubmedBERT v1.4  `https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v1.4`               19     872.1 MB
-PubmedBERT v2.1  `https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1`               20     872.1 MB
-PubmedBERT v3.1  `https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v3.1`               20     872.1 MB
-Bioformer8L v0.1 `https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1`                        20     356.4 MB
-================ ================================================================================= ================ ============
+================ =================================================================================== ================ ============
+model            Huggingface link                                                                    no. entity types size on disk
+================ =================================================================================== ================ ============
+PubmedBERT v1.2  `<https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v1.2>`               19     872.1 MB
+PubmedBERT v1.4  `<https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v1.4>`               19     872.1 MB
+PubmedBERT v2.1  `<https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1>`               20     872.1 MB
+PubmedBERT v3.1  `<https://huggingface.co/PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v3.1>`               20     872.1 MB
+Bioformer8L v0.1 `<https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1>`                        20     356.4 MB
+================ =================================================================================== ================ ============
 
 
 **NOTE** The statistics given below for each model are calculated for their respective
@@ -41,11 +41,11 @@ respective test sets.
 ================ ================= ============== ================== ================
 model            overall precision overall recall overall F1 measure overall accuracy
 ================ ================= ============== ================== ================
-PubmedBERT v1.2               0.87	         0.89	            0.88	         0.95
-PubmedBERT v1.4               0.90	         0.92	            0.91	         0.96
-PubmedBERT v2.1               0.90	         0.92	            0.91	         0.96
-PubmedBERT v3.1               0.91	         0.92	            0.91	         0.96
-Bioformer8L v0.1              0.88	         0.92	            0.90	         0.95
+PubmedBERT v1.2               0.87           0.89               0.88             0.95
+PubmedBERT v1.4               0.90           0.92               0.91             0.96
+PubmedBERT v2.1               0.90           0.92               0.91             0.96
+PubmedBERT v3.1               0.91           0.92               0.91             0.96
+Bioformer8L v0.1              0.88           0.92               0.90             0.95
 ================ ================= ============== ================== ================
 
 All the models are close in their overall performance but diverge when looking
