@@ -22,6 +22,7 @@ formatted XML files for inference via the Huggingface inference API.
    :caption: Contents:
 
    installation
+   models
    preparation
    conversions
    predictions

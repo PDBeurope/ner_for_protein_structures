@@ -8,6 +8,8 @@ Here we provide a number of command line tools to convert annotations found in
 BioC formatted XML files, as they have been exported from our annotation tool
 TeamTat (https://www.teamtat.org/), into other formats.
 
+For more details read the documentation here: 
+
 ## Instalation
 Clone the repository from the [source code](https://github.com/PDBeurope/ner_for_protein_structures.git) on Github:
 
@@ -41,6 +43,21 @@ Get all the commandline tools into the path
 ```bash
 pip install .
 ```
+
+## Downloading and setting up models
+
+The different available models, their performance stats and download links are
+given in section :ref:`models`. Huggingface supports git and all models can
+simply be downloaded through "git clone", see example below.
+
+```bash
+
+git clone https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1
+```
+
+Alternatively, the models can be accessed through Huggingface's inference API.
+This option does require a Huggingface account and an authentication token. The
+details on how to register and how to set up the token can be found on `Huggingface <https://huggingface.co/>`_
 
 ## Support
 For any feedback, help, bug report please email to:

@@ -26,10 +26,15 @@ Fetch fulltext, open access publications in BioC formatted XML using PubMedCentr
 .. autofunction:: ner_for_protein_structures.get_bioc_xml_from_pmc
 
 
-Run NER predictions on BioC formatted XML files with a trained model
---------------------------------------------------------------------
+Run NER predictions on BioC formatted XML files with a trained model - locally
+------------------------------------------------------------------------------
 
-.. autofunction:: ner_for_protein_structures.make_ner_predictions
+.. autofunction:: ner_for_protein_structures.run_local_inference_for_ner
+
+Run NER predictions on BioC formatted XML files with a trained model - remotely
+-------------------------------------------------------------------------------
+
+.. autofunction:: ner_for_protein_structures.run_hf_inference_for_ner
 
 
 Processing BioC formatted XML files to turn annotations into IOB format for SemEval calculations
