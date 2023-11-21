@@ -44,7 +44,7 @@ Get all the commandline tools into the path
 pip install .
 ```
 
-## Downloading and setting up models
+## Downloading models
 
 The different available models, their performance stats and download links are
 given in section :ref:`models`. Huggingface supports git and all models can
@@ -57,7 +57,7 @@ git clone https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1
 
 Alternatively, the models can be accessed through Huggingface's inference API.
 This option does require a Huggingface account and an authentication token. The
-details on how to register and how to set up the token can be found on `Huggingface <https://huggingface.co/>`_
+details on how to register and how to set up the token can be found on [Huggingface] (https://huggingface.co/)
 
 ## Support
 For any feedback, help, bug report please email to:
