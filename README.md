@@ -8,7 +8,7 @@ Here we provide a number of command line tools to convert annotations found in
 BioC formatted XML files, as they have been exported from our annotation tool
 TeamTat (https://www.teamtat.org/), into other formats.
 
-For more details read the documentation here: 
+For more details read the documentation here: https://ner-for-protein-structures.readthedocs.io/en/latest/
 
 ## Instalation
 Clone the repository from the [source code](https://github.com/PDBeurope/ner_for_protein_structures.git) on Github:
