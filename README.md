@@ -48,7 +48,19 @@ pip install .
 
 The different available models, their performance stats and download links are
 given in section "Models" of the documentation. Huggingface supports git and all
-models can simply be downloaded through "git clone", see example below.
+models can simply be downloaded through "git clone", see example below. However,
+as the binary file for the models is too large for standard git, the large-file
+handler needs to be installed in the parent directory the model will be cloned
+into.
+
+```bash
+
+git lfs install
+
+```
+
+After the large-file handler was installed, the models can be cloned from
+Huggingface as in the example below.
 
 ```bash
 

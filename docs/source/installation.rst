@@ -51,18 +51,22 @@ model from `Scispacy <https://allenai.github.io/scispacy/>`_
     pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
 
 
-Get all the commandline tools into the path
-
-.. code-block:: bash
-
-    pip install .
 
 Downloading and setting up models
 ---------------------------------
 
 The different available models, their performance stats and download links are
 given in section :ref:`models`. Huggingface supports git and all models can
-simply be downloaded through "git clone".
+simply be downloaded through "git clone". However, as the binary file for the
+models is too large for standard git, the large-file handler needs to be
+installed in the parent directory the model will be cloned into.
+
+.. code-block:: bash
+
+    git lfs install
+
+After the large-file handler was installed, the models can be cloned from
+Huggingface as in the example below.
 
 .. code-block:: bash
 

@@ -13,6 +13,8 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="List of functions in the tool collection" href="functions.html" />
+    <link rel="prev" title="Make predictions on un-annotated BioC XML files" href="predictions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,6 +33,42 @@
             
   <section id="calculating-performance-stats-following-semeval-procedure">
 <h1>Calculating performance stats following SemEval procedure<a class="headerlink" href="#calculating-performance-stats-following-semeval-procedure" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>To be able to judge the performance of the trained model, we used the SemEval
+evaluation procedure as published here <a class="reference external" href="https://aclanthology.org/S13-2056.pdf">SemEval</a>.
+Each predicted annotation was assessed whether it had a matching annotation in
+the ground truth and whether this match was <em>“correct”</em>, <em>“incorrect”</em>, <em>“partial”</em>,
+<em>“missing”</em> or <em>“spurious”</em>. We then evaluated a found match whether it
+belonged to one of four different classes of matches: <em>“strict”</em>, <em>“exact”</em>,
+<em>“partial”</em> or <em>“type”</em>. <em>“Strict”</em> evaluation expected a perfect match between
+span boundaries and the annotated entity type. For an <em>“exact”</em> match
+the span boundaries are expected to be identical but the entity type for the
+span was ignored. If only part of the text spans matched, then an annotation
+was evaluated as <em>“partial”</em> and the entity type was ignored. A <em>“type”</em> match
+required some overlap between the predicted and the ground truth annotation.
+For each class of match the precision, recall and F1 measure were determined.
+The statistics were calculated for the selected sections title, abstract,
+introduction, results, discussion, tables as well as table and figure captions.</p>
+<p>In order to calculate the performance statistics, the input data is assumed to
+be annotations in IOB format. A comparison is made between two files, one
+of which is repesenting the ground truth and the other being annotations from
+either an algorithm as predictions or manually created by a human annotator.</p>
+<p>Additionally, a text file containing the entity type labels that are present
+in the IOB format must be provided.</p>
+<p>Optionally, the label integrity can be checked by leaving the default of
+“–validate-labels”. This ensures that the IOB labels have been kept in correct
+order, i.e. that there is no “O” (for outside) in the middle of an annotation,
+if the annotation contains multiple word tokens.</p>
+<p>The tool will calculate the performance statistics and write them to a text
+file in the defined output directory. The text file follows the naming
+convention <cite>&lt;current date&gt;_SemEval_report.txt</cite>. If no output directory has
+been specified, the file will be written to the current directory.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.run_semeval_analysis<span class="w"> </span>--ground-truth-IOB<span class="o">=</span>test/data/SemEval/PMC4772114_ground_truth_all_IOB.tsv<span class="w"> </span>--annotated-IOB<span class="o">=</span>test/data/SemEval/PMC4772114_autoannotator_v1.2_all_IOB.tsv<span class="w"> </span>--validate-labels<span class="o">=</span><span class="s2">&quot;True&quot;</span><span class="w"> </span>--entity-types<span class="o">=</span>test/data/SemEval/entity_types.txt<span class="w">  </span>--output-dir<span class="o">=</span>test/results/SemEval_analysis/
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -51,17 +89,25 @@
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Calculating performance stats following SemEval procedure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">List of functions in the tool collection</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="predictions.html" title="previous chapter">Make predictions on un-annotated BioC XML files</a></li>
+      <li>Next: <a href="functions.html" title="next chapter">List of functions in the tool collection</a></li>
   </ul></li>
 </ul>
 </div>

@@ -14,11 +14,11 @@ TeamTat (https://www.teamtat.org/), into other formats.
 Installation
 ------------
 
-Clone the repository from the `source code <https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git>`_ on Github:
+Clone the repository from the `source code <git@github.com:PDBeurope/ner_for_protein_structures.git>`_ on Github:
 
 .. code-block:: bash
 
-    git clone https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git
+    git clone git@github.com:PDBeurope/ner_for_protein_structures.git
 
 
 
@@ -51,9 +51,27 @@ model from `Scispacy <https://allenai.github.io/scispacy/>`_
     pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
 
 
-Get all the commandline tools into the path
+
+Downloading and setting up models
+---------------------------------
+
+The different available models, their performance stats and download links are
+given in section :ref:`models`. Huggingface supports git and all models can
+simply be downloaded through "git clone". However, as the binary file for the
+models is too large for standard git, the large-file handler needs to be
+installed in the parent directory the model will be cloned into.
 
 .. code-block:: bash
 
-    pip install .
+    git lfs install
 
+After the large-file handler was installed, the models can be cloned from
+Huggingface as in the example below.
+
+.. code-block:: bash
+
+    git clone https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1
+
+Alternatively, the models can be accessed through Huggingface's inference API.
+This option does require a Huggingface account and an authentication token. The
+details on how to register and how to set up the token can be found on `Huggingface <https://huggingface.co/>`_

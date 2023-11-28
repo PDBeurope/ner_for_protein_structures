@@ -13,6 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Models" href="models.html" />
     <link rel="prev" title="Welcome to ner_for_protein_structures’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -40,8 +41,8 @@ BioC formatted XML files, as they have been exported from our annotation tool
 TeamTat (<a class="reference external" href="https://www.teamtat.org/">https://www.teamtat.org/</a>), into other formats.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>Clone the repository from the <a class="reference external" href="https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git">source code</a> on Github:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.ebi.ac.uk/melaniev/ner_for_protein_structures.git
+<p>Clone the repository from the <a class="reference external" href="git&#64;github.com:PDBeurope/ner_for_protein_structures.git">source code</a> on Github:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:PDBeurope/ner_for_protein_structures.git
 </pre></div>
 </div>
 <p>It is good practice to create a <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">virtual environment</a> for development:</p>
@@ -61,10 +62,25 @@ model from <a class="reference external" href="https://allenai.github.io/scispac
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
 </pre></div>
 </div>
-<p>Get all the commandline tools into the path</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</section>
+<section id="downloading-and-setting-up-models">
+<h2>Downloading and setting up models<a class="headerlink" href="#downloading-and-setting-up-models" title="Link to this heading">¶</a></h2>
+<p>The different available models, their performance stats and download links are
+given in section <a class="reference internal" href="models.html#id1"><span class="std std-ref">Available models</span></a>. Huggingface supports git and all models can
+simply be downloaded through “git clone”. However, as the binary file for the
+models is too large for standard git, the large-file handler needs to be
+installed in the parent directory the model will be cloned into.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>lfs<span class="w"> </span>install
 </pre></div>
 </div>
+<p>After the large-file handler was installed, the models can be cloned from
+Huggingface as in the example below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1
+</pre></div>
+</div>
+<p>Alternatively, the models can be accessed through Huggingface’s inference API.
+This option does require a Huggingface account and an authentication token. The
+details on how to register and how to set up the token can be found on <a class="reference external" href="https://huggingface.co/">Huggingface</a></p>
 </section>
 </section>
 
@@ -89,8 +105,15 @@ model from <a class="reference external" href="https://allenai.github.io/scispac
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-and-setting-up-models">Downloading and setting up models</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">List of functions in the tool collection</a></li>
 </ul>
 
 <div class="relations">
@@ -98,6 +121,7 @@ model from <a class="reference external" href="https://allenai.github.io/scispac
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to ner_for_protein_structures’s documentation!</a></li>
+      <li>Next: <a href="models.html" title="next chapter">Models</a></li>
   </ul></li>
 </ul>
 </div>

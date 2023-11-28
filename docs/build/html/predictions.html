@@ -13,6 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Calculating performance stats following SemEval procedure" href="semeval_stats.html" />
     <link rel="prev" title="Conversion of BioC formatted annotations" href="conversions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -32,6 +33,44 @@
             
   <section id="make-predictions-on-un-annotated-bioc-xml-files">
 <h1>Make predictions on un-annotated BioC XML files<a class="headerlink" href="#make-predictions-on-un-annotated-bioc-xml-files" title="Link to this heading">¶</a></h1>
+<p>For usage of the models in the context of this project two commandline tools
+have been provided. One tool contacts the Huggingface inference API to
+make predictions the other relies on the model having been downloaded locally.
+In both cases the input text needs to be provided as BioC formatted XML files.
+The publications can either have been downloaded from an open access collection
+already pre-formatted in BioC as described in <span class="xref std std-ref">get-publications</span> or may
+have  been created from a local PDF by other means.</p>
+<section id="accessing-the-models-through-huggingface-inference-api">
+<h2>Accessing the models through Huggingface inference API<a class="headerlink" href="#accessing-the-models-through-huggingface-inference-api" title="Link to this heading">¶</a></h2>
+<p>To access the models through the inference API one needs to have the input text
+formatted as BioC XML as well as an account with Huggingface and an access token.
+If one followed the instructions for creating a virtual environment for the
+project and activated it, all the necessary dependencies should have been
+installed. The name of the remote model on Huggingface needs to be given.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.run_hf_inference_for_ner<span class="w"> </span>--xml-dir<span class="o">=</span>test/data/not_annotated_BioC_XML/<span class="w"> </span>--model-repo<span class="o">=</span><span class="s2">&quot;PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1&quot;</span><span class="w"> </span>--auth-token<span class="o">=</span><span class="s2">&quot;&lt;my_hf_access_token&gt;&quot;</span><span class="w"> </span>--output-dir<span class="o">=</span>test/results/predictions/
+</pre></div>
+</div>
+<p>Although a waiting step has been added in the inference script, the API does have
+a lag phase which may cause some text passages not having any annotations. Also,
+anyone running requests on a free plan will find that the API has an access limit
+per hour which can easily be reached by just running two publications of average
+length.</p>
+</section>
+<section id="accessing-the-models-locally">
+<h2>Accessing the models locally<a class="headerlink" href="#accessing-the-models-locally" title="Link to this heading">¶</a></h2>
+<p>The models can also be accessed loacally after download. They use between 350MB and
+900MB of disk space. The input publications need to be formatted in BioC and
+provided as XML. Model location needs to be provided as full path. A short-hand
+for the model name should be provided as this will be added as “annotator” in the
+annotations to determine the origin of the annotation.</p>
+<p>The smaller bioformer8L and the larger PubmedBERT models both have been tested
+locally on a MacBook Pro M1 with 16GB RAM running Sonoma 14.1.1.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.run_local_inference_for_ner<span class="w"> </span>--xml-dir<span class="o">=</span>test/data/not_annotated_BioC_XML/<span class="w"> </span>--model-dir<span class="o">=</span>&lt;full_path_to_model_location&gt;<span class="w"> </span>--model-name<span class="o">=</span><span class="s2">&quot;bioformer8L_v0.1&quot;</span><span class="w"> </span>--output-dir<span class="o">=</span>test/results/predictions/
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -54,9 +93,16 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Make predictions on un-annotated BioC XML files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Make predictions on un-annotated BioC XML files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-the-models-through-huggingface-inference-api">Accessing the models through Huggingface inference API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-the-models-locally">Accessing the models locally</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">List of functions in the tool collection</a></li>
 </ul>
 
 <div class="relations">
@@ -64,6 +110,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="conversions.html" title="previous chapter">Conversion of BioC formatted annotations</a></li>
+      <li>Next: <a href="semeval_stats.html" title="next chapter">Calculating performance stats following SemEval procedure</a></li>
   </ul></li>
 </ul>
 </div>

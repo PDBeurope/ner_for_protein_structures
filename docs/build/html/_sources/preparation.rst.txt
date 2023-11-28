@@ -2,7 +2,7 @@
 Data Preparation
 ================
 
-
+.. _get-publications:
 ## Prepare some data
 
 The scripts are based on BioC formatted XML versions of scientific publications.

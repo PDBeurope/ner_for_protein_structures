@@ -46,18 +46,47 @@ formatted XML files for inference via the Huggingface inference API.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#downloading-and-setting-up-models">Downloading and setting up models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#available-models">Available models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#overall-performance-stats-on-respective-test-sets">Overall performance stats on respective test sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#per-entity-type-precision-on-respective-test-sets">Per-entity type precision on respective test sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#per-entity-type-recall-on-respective-test-sets">Per-entity type recall on respective test sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#per-entity-type-f1-measure-on-respective-test-sets">Per-entity type F1 measure on respective test sets</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="conversions.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions.html#conversion-to-iob-for-training">Conversion to IOB for training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions.html#conversion-to-iob-to-calculate-performance-statistics">Conversion to IOB to calculate performance statistics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions.html#conversion-of-annotations-and-respective-sentences-to-json">Conversion of annotations and respective sentences to JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions.html#conversion-of-annotations-and-respective-sentences-to-csv">Conversion of annotations and respective sentences to CSV</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="predictions.html#accessing-the-models-through-huggingface-inference-api">Accessing the models through Huggingface inference API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="predictions.html#accessing-the-models-locally">Accessing the models locally</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="semeval_stats.html#overview">Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">List of functions in the tool collection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#convert-annotations-in-bioc-formatted-xml-to-csv">Convert annotations in BioC formatted XML to CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#convert-annotations-in-bioc-formatted-xml-to-json">Convert annotations in BioC formatted XML to JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#fetch-fulltext-open-access-publications-in-bioc-formatted-xml-using-pubmedcentral-ids">Fetch fulltext, open access publications in BioC formatted XML using PubMedCentral IDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-locally">Run NER predictions on BioC formatted XML files with a trained model - locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-remotely">Run NER predictions on BioC formatted XML files with a trained model - remotely</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-semeval-calculations">Processing BioC formatted XML files to turn annotations into IOB format for SemEval calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-model-training">Processing BioC formatted XML files to turn annotations into IOB format for model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#running-semeval-to-calculate-performance-statistics">Running SemEval to calculate performance statistics</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -90,10 +119,12 @@ formatted XML files for inference via the Huggingface inference API.</p>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">List of functions in the tool collection</a></li>
 </ul>
 
 <div class="relations">
