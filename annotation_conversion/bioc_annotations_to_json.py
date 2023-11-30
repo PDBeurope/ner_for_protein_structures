@@ -1,7 +1,4 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
-
 import os
 import argparse
 import logging
@@ -17,27 +14,14 @@ logger.setLevel(logging.INFO)
 
 def process_bioc_xml_file(input):
     """
-    This script extracts the annotations from a BioC formatted XML file along
-    with the sentence they belong to and writes them into a JSON
-    file with the following keys: '<unique PubMedCentral ID>', 'annotations',
-    'sid', 'sent', 'section', 'ner'; 'ner' contains a list of annotations for the sentence
-    with ID 'sid'
-
-    Input
-
-    :param pmcid-list: full path to BioC formatted XML files with annotations
-    :type pmcid-list: str
-
-    :param output-dir: full path to output directory; default = current directory
-    :type output-dir: str
-
-
-    Output
-
-    :return: <unique PubMedCentral ID>.csv; tab-separated CSV file of relevant
-             sentences and their annotations; column labels are: anno_start,
-             anno_end, anno_text, entity_type, sentence, section
-    :rtype: str
+    Extract the annotations from BioC XML file and return the ID of the
+    annotated document to be used as identifier and the annotations as a
+    list of JSON dictionaries. Each element in the list is a JSON dictionary
+    which represents a sentence. The keys for the dictionary are sid, sent,
+    section and ner. Ner represents a nested list for all the annotations
+    found in the sentence of sid and each sublist contains the start and end
+    character positions of an annotation, the text snippet under the covered
+    span and the entity type.
 
     """
     non_overlap = defaultdict(list)
@@ -155,6 +139,11 @@ def process_bioc_xml_file(input):
 
 
 def make_annotation_json(bioc_xml_dir, output_dir):
+    '''
+    Iterate over the annotations in the returned list for the document and
+    create a combined JSON file to save to disk
+
+    '''
     progress_bar_pub = tqdm(total=len(os.listdir(bioc_xml_dir)),
                                  desc = "Iterating over publications...")
 
@@ -184,6 +173,35 @@ def make_annotation_json(bioc_xml_dir, output_dir):
         
 
 def main():
+
+    """
+
+    This script extracts the annotations from a BioC formatted XML file along
+    with the sentence they belong to. All the documents in a given directory
+    are processed and their respective IDs, <unique PubMedCentral ID>, are
+    used as key in the returned JSON dictionary. For each document entry the
+    following keys are used for the annotations: annotations, sid, sent,
+    section, ner. 'ner' contains a list of annotations for the sentence with
+    ID sid. All documents and their annotations are saved to disk as
+    annotations.json.
+
+    Input
+
+    :param bioc-xml-dir: location of directory holding BioC XML files with annotations
+
+    :type bioc-xml-dir: str()
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str()
+
+
+    Output
+
+    :return: annotations.json
+    :rtype: {JSON}
+
+    """
+
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(

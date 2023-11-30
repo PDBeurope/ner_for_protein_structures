@@ -30,6 +30,9 @@ formatted XML files for inference via the Huggingface inference API.
    functions
 
 
+.. automodule:: ner_for_protein_structures
+
+
 Indices and tables
 ==================
 

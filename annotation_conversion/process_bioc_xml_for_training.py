@@ -1,7 +1,4 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
-
 import os
 import argparse
 import logging
@@ -18,35 +15,14 @@ logger.setLevel(logging.INFO)
 
 def process_bioc_xml_file(bioc_xml_dir, output_dir):
     """
-    This script extracts the annotations from a BioC formatted XML file along
-    with the sentence they belong to and converts everything into IOB
-    formatted sentences with annotations; IOB formatted annotations serve as
-    input for training a transformer model for automated named entity
-    recognition for protein structure specific terms; four files are being
-    produced: train.tsv, dev.tsv, test.tsv, all.tsv; the first three are
-    the different fractions used for model training and development; the last
-    one contains all sentences and annotations
-
-    Input
-
-    :param pmcid-list: full path to BioC formatted XML files with annotations
-    :type pmcid-list: str
-
-    :param output-dir: full path to output directory; default = current directory
-    :type output-dir: str
-
-    
-    Output
-
-    :return: train.tsv, dev.tsv, test.tsv, all.tsv; tab-separated TSV files of
-             relevant sentences and their annotations in IOB format; all.tsv
-             contains all the sentences; train.tsvis the training fraction of
-             the processed sentences; dev.tsv is the development fraction of
-             the sentences used during development; test.tsv is the final
-             testing set
-    :rtype: str
-
+    opening a BioC XML file with annotations and extracting all the annotations
+    and their corresponding sentences in a document; convert the sentences and 
+    their annotations to IOB format so they can be used for model training;
+    this will produce four files: train.tsv (training data), dev.tsv
+    (development data for model optimisation), test.tsv (testing data for
+    indepedent assessment at the end), all.tsv (combined file of everything);
     """
+
     non_overlap = defaultdict(list)
     non_overlap_counter = 0
     progress_bar_pub = tqdm(total=len(os.listdir(bioc_xml_dir)),
@@ -147,6 +123,36 @@ def process_bioc_xml_file(bioc_xml_dir, output_dir):
 
 
 def main():
+    """
+    This script extracts the annotations from a BioC formatted XML file along
+    with the sentence they belong to and converts everything into IOB
+    formatted sentences with annotations; IOB formatted annotations serve as
+    input for training a transformer model for automated named entity
+    recognition for protein structure specific terms; four files are being
+    produced: train.tsv, dev.tsv, test.tsv, all.tsv; the first three are
+    the different fractions used for model training and development; the last
+    one contains all sentences and annotations
+
+    Input
+
+    :param pmcid-list: full path to BioC formatted XML files with annotations
+    :type pmcid-list: str
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str
+
+    
+    Output
+
+    :return: train.tsv, dev.tsv, test.tsv, all.tsv; tab-separated TSV files of
+             relevant sentences and their annotations in IOB format; all.tsv
+             contains all the sentences; train.tsvis the training fraction of
+             the processed sentences; dev.tsv is the development fraction of
+             the sentences used during development; test.tsv is the final
+             testing set
+    :rtype: TSV
+
+    """
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(

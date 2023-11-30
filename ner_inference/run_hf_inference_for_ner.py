@@ -1,17 +1,23 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structures/ner_venv/bin/python
 
+#  importing necessary modules/librarie
 import argparse
 import os
+import logging
 import pandas as pd
 import xml.etree.ElementTree as ET
 from datetime import datetime
-import logging
 from ner_inference.inference_tools import make_hf_request
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
+    """
+    make predictions through Huggingface inference API on publications provided as
+    BioC formatted XML; model for inference can be specified and a authentication
+    token is required; returns BioC XML of the publication with annotations and
+    saves them to disk in specified output directory
+    """
     try:
         # check whether the input directory exists
         assert os.path.exists(xml_dir)
@@ -23,7 +29,7 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
     # create model_name from repo
     repo_split = model_repo.split("/")
     model_name = repo_split[-1]
-    print(model_name)
+    logger.info(f"Using model: {model_name}")
 
     date = datetime.strftime(datetime.now(), "%Y%m%d")
 
@@ -174,34 +180,84 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
 
 
 def main():
+    """
+    This function contacts a specified model on Huggingface through the
+    inference API for prediction. The model on Huggingface needs to be
+    defined and an authentication token is required. The default model is
+    PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1. The input
+    documents for which annotations are to be produced have to be provided
+    through a pointer to the directory where they are kept. All documents
+    have to be in BioC formatted XML. It is assumed that input BioC XML
+    files have their file names starting with a unique ID, e.g. <PMC ID>,
+    which will be reused to construct the output filename. Suggested naming
+    convension for input file name is <date>_xml_<unique ID>
+
+    Input
+
+    :param xml-dir: directory containing BioC formatted XML files for which
+                    annotations are to be created; files are expected to
+                    follow a naming convention of <date>_xml_<unique ID>
+    :type xml-dir: str()
+
+    :param model-repo: model repo name on Huggingface, e.g.
+                       PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1,
+                       which is the default
+    :type model-repo: str()
+
+    :param auth-token: Huggingface token to authenticate into inference API
+    :type auth-token: str()
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str()
+
+
+    Output
+
+    :return: <unique ID>_<model name>_<date>.xml; XML file with full text for open access
+            publication in BioC format
+    :rtype: XML
+
+    """
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "Parsing a list PMC IDs in TXT format to retrieve \n"
-                      "their associated full text XML by querying NCBI BioNLP API. \n"
-                      "Returns an XML file in BioC format for each PMC ID if the \n"
-                      "access for the ID is open."
+        description = "This function contacts a specified model on Huggingface \n"
+                      "through the inference API for prediction. The model on \n"
+                      "Huggingface needs to be defined and an authentication \n"
+                      "token is required. The default model is \n"
+                      "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1. \n"
+                      "The input documents for which annotations are to be produced \n"
+                      "have to be provided through a pointer to the directory where \n"
+                      "they are kept. All documents have to be in BioC formatted XML. \n"
+                      "It is assumed that input BioC XML files have their file names \n"
+                      "starting with a unique ID, e.g. <PMC ID>, which will be reused\n"
+                      "to construct the output filename. Suggested naming convension\n"
+                      "for input file name is <date>_xml_<unique ID>"
     )
     parser.add_argument(
                         "--xml-dir",
                         type = str,
                         default = None,
                         dest = "xml_dir",
-                        help = "A list of input PMC IDs in TXT format",
+                        help = "Directory containing BioC XML files for annotation with a \n"
+                               "trained model; file names should follow the naming convention \n"
+                               "<date>_xml_<unique ID>",
     )
     parser.add_argument(
                         "--model-repo",
                         type = str,
                         default = "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1",
                         dest = "model_repo",
-                        help = "Huggingface repo id holding a pre-trained model"
+                        help = "Huggingface repo id holding a pre-trained model, e.g. \n"
+                               "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1, \n"
+                               "which is the default"
     )
     parser.add_argument(
                         "--auth-token",
                         type = str,
                         default = None,
                         dest = "auth_token",
-                        help = "Huggingface token for authentocation"
+                        help = "Huggingface token for authentication"
     )
     parser.add_argument(
                         "--output-dir",

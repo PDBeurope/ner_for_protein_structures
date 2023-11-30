@@ -1,5 +1,3 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
 import os
 import argparse
@@ -15,34 +13,10 @@ logger.setLevel(logging.INFO)
 
 def process_bioc_xml_file(bioc_xml_dir, output_dir, annotator = None):
     """
-    This script extracts the annotations from a BioC formatted XML file along
-    with the sentence they belong to and converts everything into IOB
-    formatted sentences with annotations; IOB formatted annotations serve as
-    input for calculating performance statistics following the SemEval
-    procedure; optionally, an 'annotator' can be selected for later calculation
-    of individual performance for either a human annotator or predictions
-    from a trained model; four output files are produced as tab-separated
-    TSV files; 'all.tsv' acontains all annotated sentences; 
-
-    Input
-
-    :param pmcid-list: full path to BioC formatted XML files with annotations
-    :type pmcid-list: str
-
-    :param output-dir: full path to output directory; default = current directory
-    :type output-dir: str
-
-    :param annotator: lable/name/identifier for a particular human annotator or
-                      trained model
-    :type annotator: str
-
-    
-    Output
-
-    :return: all.tsv; tab-separated TSV file of relevant sentences and their
-             annotations in IOB format
-    :rtype: str
-
+    opening a BioC XML file with annotations and extracting all the annotations
+    and their corresponding sentences in a document; alternatively add identifiers
+    for individual annotators; convert the sentences and their annottaions to IOB
+    format for analysis with SemEval script
     """
     non_overlap = defaultdict(list)
     non_overlap_counter = 0
@@ -145,6 +119,36 @@ def process_bioc_xml_file(bioc_xml_dir, output_dir, annotator = None):
 
 
 def main():
+    """
+    This script extracts the annotations from a BioC formatted XML file along
+    with the sentence they belong to and converts everything into IOB
+    formatted sentences with annotations; IOB formatted annotations serve as
+    input for calculating performance statistics following the SemEval
+    procedure; optionally, an 'annotator' can be selected for later calculation
+    of individual performance for either a human annotator or predictions
+    from a trained model; a tab-separated TSV files 'all.tsv' acontains
+    all annotated sentences; 
+
+    Input
+
+    :param pmcid-list: full path to BioC formatted XML files with annotations
+    :type pmcid-list: str
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str
+
+    :param annotator: lable/name/identifier for a particular human annotator or
+                      trained model
+    :type annotator: str
+
+    
+    Output
+
+    :return: all.tsv; tab-separated TSV file of relevant sentences and their
+             annotations in IOB format
+    :rtype: TSV
+
+    """
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(

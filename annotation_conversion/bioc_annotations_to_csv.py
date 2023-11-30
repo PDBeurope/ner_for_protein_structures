@@ -1,7 +1,4 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
-
 import os
 import argparse
 import logging
@@ -17,26 +14,13 @@ logger.setLevel(logging.INFO)
 
 def process_bioc_xml_file(input):
     """
-    This script extracts the annotations from a BioC formatted XML file along
-    with the sentence they belong to and writes them into a tab-separated CSV
-    file with the following column labels: anno_start, anno_end, anno_text,
-    entity_type, sentence, section; one one CSV file for each XML file
-
-    Input
-
-    :param pmcid-list: full path to BioC formatted XML files with annotations
-    :type pmcid-list: str
-
-    :param output-dir: full path to output directory; default = current directory
-    :type output-dir: str
-
-
-    Output
-
-    :return: <unique PubMedCentral ID>.csv; tab-separated CSV file of relevant
-             sentences and their annotations; column labels are: anno_start,
-             anno_end, anno_text, entity_type, sentence, section
-    :rtype: str
+    Extract the annotations from BioC XML file and return the ID of the
+    annotated document to be used as identifier and the annotations as a
+    nested list. Each element in the list is another list which contains
+    for each annotation the start and end character position for the
+    annotation, the actual text in the span, the entity type given to the
+    text span, the sentence the annotation was found in and the section
+    of the publication the sentence belongs to.
 
     """
     non_overlap = defaultdict(list)
@@ -149,6 +133,12 @@ def process_bioc_xml_file(input):
 
 
 def make_annotation_csv(bioc_xml_dir, output_dir):
+    '''
+    Iterate over the annotations in the returned list for the document and
+    convert into a dataframe to save as tab-separated CSV file to disk
+
+    '''
+
     progress_bar_pub = tqdm(total=len(os.listdir(bioc_xml_dir)),
                                  desc = "Iterating over publications...")
     
@@ -171,8 +161,33 @@ def make_annotation_csv(bioc_xml_dir, output_dir):
         
 
 def main():
+
+    """
+
+    This script extracts the annotations from a BioC formatted XML file along
+    with the sentence they belong to and writes them into a tab-separated CSV
+    file with the following column labels: anno_start, anno_end, anno_text,
+    entity_type, sentence, section; one one CSV file for each XML file
+
+    Input
+
+    :param bioc-xml-dir: location of directory holding BioC XML files with annotations
+
+    :type bioc-xml-dir: str()
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str()
+
+
+    Output
+
+    :return: <doc_id>.csv
+    :rtype: CSV 
+
+    """
+
     logging.basicConfig(level=logging.INFO)
-    
+
     parser = argparse.ArgumentParser(
         description = "This script extracts the annotations from a BioC \n"
                       "formatted XML file along with the sentence they belong \n"

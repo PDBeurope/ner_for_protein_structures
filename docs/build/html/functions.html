@@ -39,27 +39,175 @@ Detailed descriptions can be found in their respective sections.</p>
 </section>
 <section id="convert-annotations-in-bioc-formatted-xml-to-csv">
 <h2>Convert annotations in BioC formatted XML to CSV<a class="headerlink" href="#convert-annotations-in-bioc-formatted-xml-to-csv" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.annotation_conversion.bioc_annotations_to_csv.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.annotation_conversion.bioc_annotations_to_csv.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/annotation_conversion/bioc_annotations_to_csv.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.annotation_conversion.bioc_annotations_to_csv.main" title="Link to this definition">¶</a></dt>
+<dd><p>This script extracts the annotations from a BioC formatted XML file along
+with the sentence they belong to and writes them into a tab-separated CSV
+file with the following column labels: anno_start, anno_end, anno_text,
+entity_type, sentence, section; one one CSV file for each XML file</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bioc-xml-dir</strong> (<em>str</em><em>(</em><em>)</em>) – location of directory holding BioC XML files with annotations</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em><em>(</em><em>)</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>&lt;doc_id&gt;.csv</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>CSV</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="convert-annotations-in-bioc-formatted-xml-to-json">
 <h2>Convert annotations in BioC formatted XML to JSON<a class="headerlink" href="#convert-annotations-in-bioc-formatted-xml-to-json" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.annotation_conversion.bioc_annotations_to_json.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.annotation_conversion.bioc_annotations_to_json.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/annotation_conversion/bioc_annotations_to_json.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.annotation_conversion.bioc_annotations_to_json.main" title="Link to this definition">¶</a></dt>
+<dd><p>This script extracts the annotations from a BioC formatted XML file along
+with the sentence they belong to. All the documents in a given directory
+are processed and their respective IDs, &lt;unique PubMedCentral ID&gt;, are
+used as key in the returned JSON dictionary. For each document entry the
+following keys are used for the annotations: annotations, sid, sent,
+section, ner. ‘ner’ contains a list of annotations for the sentence with
+ID sid. All documents and their annotations are saved to disk as
+annotations.json.</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bioc-xml-dir</strong> (<em>str</em><em>(</em><em>)</em>) – location of directory holding BioC XML files with annotations</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em><em>(</em><em>)</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>annotations.json</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>{JSON}</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="fetch-fulltext-open-access-publications-in-bioc-formatted-xml-using-pubmedcentral-ids">
 <h2>Fetch fulltext, open access publications in BioC formatted XML using PubMedCentral IDs<a class="headerlink" href="#fetch-fulltext-open-access-publications-in-bioc-formatted-xml-using-pubmedcentral-ids" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/bioc_xml_retrieval/get_bioc_xml_from_pmc.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-locally">
 <h2>Run NER predictions on BioC formatted XML files with a trained model - locally<a class="headerlink" href="#run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-locally" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.ner_inference.run_local_inference_for_ner.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.ner_inference.run_local_inference_for_ner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/ner_inference/run_local_inference_for_ner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.ner_inference.run_local_inference_for_ner.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-remotely">
 <h2>Run NER predictions on BioC formatted XML files with a trained model - remotely<a class="headerlink" href="#run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-remotely" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/ner_inference/run_hf_inference_for_ner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-semeval-calculations">
 <h2>Processing BioC formatted XML files to turn annotations into IOB format for SemEval calculations<a class="headerlink" href="#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-semeval-calculations" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_performance_stats.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_performance_stats.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/annotation_conversion/process_bioc_xml_for_performance_stats.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_performance_stats.main" title="Link to this definition">¶</a></dt>
+<dd><p>This script extracts the annotations from a BioC formatted XML file along
+with the sentence they belong to and converts everything into IOB
+formatted sentences with annotations; IOB formatted annotations serve as
+input for calculating performance statistics following the SemEval
+procedure; optionally, an ‘annotator’ can be selected for later calculation
+of individual performance for either a human annotator or predictions
+from a trained model; a tab-separated TSV files ‘all.tsv’ acontains
+all annotated sentences;</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pmcid-list</strong> (<em>str</em>) – full path to BioC formatted XML files with annotations</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em>) – full path to output directory; default = current directory</p></li>
+<li><p><strong>annotator</strong> (<em>str</em>) – lable/name/identifier for a particular human annotator or
+trained model</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>all.tsv; tab-separated TSV file of relevant sentences and their
+annotations in IOB format</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TSV</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-model-training">
 <h2>Processing BioC formatted XML files to turn annotations into IOB format for model training<a class="headerlink" href="#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-model-training" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_training.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_training.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/annotation_conversion/process_bioc_xml_for_training.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_training.main" title="Link to this definition">¶</a></dt>
+<dd><p>This script extracts the annotations from a BioC formatted XML file along
+with the sentence they belong to and converts everything into IOB
+formatted sentences with annotations; IOB formatted annotations serve as
+input for training a transformer model for automated named entity
+recognition for protein structure specific terms; four files are being
+produced: train.tsv, dev.tsv, test.tsv, all.tsv; the first three are
+the different fractions used for model training and development; the last
+one contains all sentences and annotations</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pmcid-list</strong> (<em>str</em>) – full path to BioC formatted XML files with annotations</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>train.tsv, dev.tsv, test.tsv, all.tsv; tab-separated TSV files of
+relevant sentences and their annotations in IOB format; all.tsv
+contains all the sentences; train.tsvis the training fraction of
+the processed sentences; dev.tsv is the development fraction of
+the sentences used during development; test.tsv is the final
+testing set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TSV</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="running-semeval-to-calculate-performance-statistics">
 <h2>Running SemEval to calculate performance statistics<a class="headerlink" href="#running-semeval-to-calculate-performance-statistics" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.sem_eval.run_semeval_analysis.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.sem_eval.run_semeval_analysis.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/sem_eval/run_semeval_analysis.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.sem_eval.run_semeval_analysis.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 

@@ -1,12 +1,11 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
-from operator import add
-from collections import namedtuple
-from typing import List, Tuple, Dict
 import csv
 import logging
 import pandas as pd
+from operator import add
+from collections import namedtuple
+from typing import List, Tuple, Dict
+
 
 """
 Date: 13 Nov. 2019

@@ -1,11 +1,9 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
 import argparse
 import os
+import logging
 from datetime import datetime
 from pathlib import Path
-import logging
 from sem_eval.performance_stats_from_IOB_pred_gt import semeval_report
 
 logger = logging.getLogger(__name__)
@@ -13,47 +11,9 @@ logger.setLevel(logging.INFO)
 
 def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_dir):
     """
-    This function runs the SemEval evaluation script to calculate performance
-    statistics as precision, recall and F1 measure for annotations coming from
-    either an automatic system in form of predictions, or as manually created
-    annotations. The details for the evaluation process have been published here:
-    https://aclanthology.org/S13-2056.pdf. Two IOB formatted input files of
-    word tokesn and corresponding labels have to be provided. One of the files
-    represents the ground truth/gold standard to compare against. The other one
-    contains the predicted/manually created annotations.
-
-    Input
-
-    :param ground-truth-IOB: path to IOB formated sentence input of word tokens 
-                             and labels for the ground truth/gold standard data;
-                             tab-separated .TSV file
-    :type ground-truth-IOB: str
-
-    :param annotated-IOB: path to IOB formated sentence input of word tokens
-                          and labels for the predicted/manually created data;
-                          tab-separated .TSV file
-    :type annotated-IOB: str
-
-    :param validate-labels: True/False Boulean label on whether or not to check
-                            label integrity; default: True
-    :type validate-labels: Boulean
-
-    :param entity-types: path to .TXT file containg the entity type labels that
-                         were used to generate the IOB formatted data files
-    :type entity-types: str
-    
-    :param output-dir: full path to output directory; default: current directory
-    :type output-dir: str
-
-
-    Output
-
-    :return: <current date>_SemEval_report.txt; text file containing the score
-             report for matches in annotations between the ground truth/gold
-             standard and the predicted/manually created data following the
-             SemEval scoring procedure.
-    :rtype: str
-
+    open the various input files and check they exist; run SemEval evaluation and compare
+    ground truth annotations in IOB format with manually/automatically annotated text in
+    IOB format to get annotation statistics and performance
     """
     try:
         # ckeck whether the input file (list of PMCIDs) exists
@@ -110,6 +70,50 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
 
 
 def main():
+    """
+    This function runs the SemEval evaluation script to calculate performance
+    statistics as precision, recall and F1 measure for annotations coming from
+    either an automatic system in form of predictions, or as manually created
+    annotations. The details for the evaluation process have been published here:
+    https://aclanthology.org/S13-2056.pdf. Two IOB formatted input files of
+    word tokesn and corresponding labels have to be provided. One of the files
+    represents the ground truth/gold standard to compare against. The other one
+    contains the predicted/manually created annotations.
+
+    Input
+
+    :param ground-truth-IOB: path to IOB formated sentence input of word tokens 
+                             and labels for the ground truth/gold standard data;
+                             tab-separated .TSV/.CSV file
+    :type ground-truth-IOB: str
+
+    :param annotated-IOB: path to IOB formated sentence input of word tokens
+                          and labels for the predicted/manually created data;
+                          tab-separated .TSV/.CSV file
+    :type annotated-IOB: str
+
+    :param validate-labels: True/False Boulean label on whether or not to check
+                            label integrity; default: True
+    :type validate-labels: Boulean
+
+    :param entity-types: path to .TXT file containg the entity type labels that
+                         were used to generate the IOB formatted data files
+    :type entity-types: str
+    
+    :param output-dir: full path to output directory; default: current directory
+    :type output-dir: str
+
+
+    Output
+
+    :return: <current date>_SemEval_report.txt; text file containing the score
+             report for matches in annotations between the ground truth/gold
+             standard and the predicted/manually created data following the
+             SemEval scoring procedure.
+    :rtype: str
+
+    """
+
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
@@ -129,31 +133,34 @@ def main():
                         type = str,
                         default = None,
                         dest = "iob_gt",
-                        help = "A list of input PMC IDs in TXT format",
+                        help = "path to tab-separated ground truth CSV file \n"
+                               "containing sentences and annotations in IOB format",
     )
     parser.add_argument(
                         "--annotated-IOB",
                         type = str,
                         default = None,
                         dest = "iob_ann",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = "path to tab-separated CSV file to compare against \n"
+                               "ground truth containing sentences and annotations \n"
+                               "in IOB format"
     )
     parser.add_argument(
                         "--validate-labels",
                         type = str,
                         default = None,
                         dest = "validate_labels",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = "True/False Boulean label on whether or not to \n"
+                               "check label integrity; default: True"
     )
     parser.add_argument(
                         "--entity-types",
                         type = str,
                         default=None,
                         dest = "entity_types",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = "path to .TXT file containg the entity type \n"
+                               "labels that were used to generate the IOB \n"
+                               "formatted data files"
     )
     parser.add_argument(
                         "--output-dir",

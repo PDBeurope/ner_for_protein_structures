@@ -1,11 +1,9 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
 import argparse
 import os
+import logging
 from datetime import datetime
 from pathlib import Path
-import logging
 from bioc_xml_retrieval.europepmc_queries import fetch_bioc_xml
 
 logger = logging.getLogger(__name__)
@@ -13,29 +11,8 @@ logger.setLevel(logging.INFO)
 
 def get_bioc_xml_from_pmc(pmcid_list, output_dir):
     """
-    This function uses a list of PMC IDs in TXT format as input to query 
-    NCBI BioNLP API and retrieve the full text BioC formated XML for each ID. 
-    This is only possible if a given ID represents an open access publication. 
-    If access is restricted in any way then the full text can not be retrieved. 
-    The returned XML file contains the publication text formated according to
-    BioC XML standards as develop by the BioCreative initiative.
-
-    Input
-
-    :param pmcid-list: list of PMC IDs representing open access, full text 
-                       publications in PMC; in TXT format
-    :type pmcid-list: list[str]
-
-    :param output-dir: full path to output directory; default = current directory
-    :type output-dir: str
-
-
-    Output
-
-    :return: <date>_xml_<PMCID>.xml; XML file with full text for open access
-            publication in BioC format
-    :rtype: str
-
+    making a request to open access set at NCBI to retrieve BioC formatted XML
+    for a given PMC ID
     """
     try:
         # ckeck whether the input file (list of PMCIDs) exists
@@ -74,6 +51,32 @@ def get_bioc_xml_from_pmc(pmcid_list, output_dir):
 
 
 def main():
+    """
+    This function uses a list of PMC IDs in TXT format as input to query 
+    NCBI BioNLP API and retrieve the full text BioC formated XML for each ID. 
+    This is only possible if a given ID represents an open access publication. 
+    If access is restricted in any way, then the full text can not be retrieved. 
+    The returned XML file contains the publication text formated according to
+    BioC XML standards as develop by the BioCreative initiative.
+
+    Input
+
+    :param pmcid-list: list of PMC IDs representing open access, full text 
+                       publications in PMC; in TXT format
+    :type pmcid-list: list[str]
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str
+
+
+    Output
+
+    :return: <date>_xml_<PMCID>.xml; XML file with full text for open access
+            publication in BioC format
+    :rtype: XML
+
+    """
+     
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(

@@ -1,20 +1,25 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structures/ner_venv/bin/python
-
+#  importing necessary modules/libraries
 import os
 import argparse
 import logging
+import pandas as pd
+import xml.etree.ElementTree as ET
 from transformers import AutoTokenizer
 from transformers import AutoModelForTokenClassification
 from transformers import PreTrainedTokenizerFast
 from transformers import pipeline
-import pandas as pd
-import xml.etree.ElementTree as ET
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
+    """
+    make predictions using a local model on publications provided as
+    BioC formatted XML; model location needs to be specified;
+    returns BioC XML of the publication with annotations and
+    saves them to disk in specified output directory
+    """
     try:
         # check whether the input directory exists
         assert os.path.exists(xml_dir)
@@ -193,13 +198,61 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
 
 
 def main():
+    """
+    This function annotates BioC formatted XML files of publications for
+    named entities using a trained model stored locally. The input
+    documents for which annotations are to be produced have to be provided
+    through a pointer to the directory where they are kept. All documents
+    have to be in BioC formatted XML. It is assumed that input BioC XML
+    files have their file names starting with a unique ID, e.g. <PMC ID>,
+    which will be reused to construct the output filename. Suggested naming
+    convension for input file name is <date>_xml_<unique ID>. A pointer to
+    the model locally has to be provided. The model directory name is
+    assumed to match the one for the remote location on Huggingface,
+    e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1.
+
+    Input
+
+    :param xml-dir: directory containing BioC formatted XML files for which
+                    annotations are to be created; files are expected to
+                    follow a naming convention of <date>_xml_<unique ID>
+    :type xml-dir: str()
+
+    :param model-dir: directory containing a trained model for inference;
+                      directory name is assumed to match the remote location
+                      on Huggingface, e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1
+    :type model-dir: str()
+
+    :param model-name: model name shorthand to be used as annotator
+    :type model-name: str()
+
+    :param output-dir: full path to output directory; default = current directory
+    :type output-dir: str()
+
+
+    Output
+
+    :return: <unique ID>_<model name>_<date>.xml; XML file with full text for open access
+            publication in BioC format
+    :rtype: XML
+
+    """
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "Parsing a list PMC IDs in TXT format to retrieve \n"
-                      "their associated full text XML by querying NCBI BioNLP API. \n"
-                      "Returns an XML file in BioC format for each PMC ID if the \n"
-                      "access for the ID is open."
+        description = "This function annotates BioC formatted XML files of \n"
+                      "publications for named entities using a trained model \n"
+                      "stored locally. The input documents for which annotations \n"
+                      "are to be produced have to be provided through a pointer \n"
+                      "to the directory where they are kept. All documents have \n"
+                      "to be in BioC formatted XML. It is assumed that input BioC \n"
+                      "XML files have their file names starting with a unique ID, \n"
+                      "e.g. <PMC ID>, which will be reused to construct the output \n"
+                      "filename. Suggested naming convension for input file name is \n"
+                      "<date>_xml_<unique ID>. A pointer to the model locally has to \n"
+                      "be provided. The model directory name is assumed to match the \n"
+                      "one for the remote location on Huggingface, \n"
+                      "e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1."
     )
     parser.add_argument(
                         "--xml-dir",
