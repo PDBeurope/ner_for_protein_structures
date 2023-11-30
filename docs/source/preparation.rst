@@ -28,7 +28,8 @@ We provide a small commandline tool that will fetch any open access publications
 in BioC XML from this FTP site given a list of PubMedCentral IDs. PubMedCentral
 IDs are constructed of a 3-letter source identifier "PMC" and a multi-digit
 numerical part, e.g. "PMC4784909". The example here refers to the publication 
-`The Structural Basis of Coenzyme A Recycling in a Bacterial Organelle <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4784909/>`_. The downloaded files will be named `"<date>_xml_<unique PMC ID>.xml"`
+`The Structural Basis of Coenzyme A Recycling in a Bacterial Organelle <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4784909/>`_.
+The downloaded files will be named `"<date>_xml_<unique PMC ID>.xml"`
 
 
 **Example**
