@@ -39,11 +39,6 @@ To be able to use some of the NLP tools install the scientific, english language
 pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
 ```
 
-Get all the commandline tools into the path
-```bash
-pip install .
-```
-
 ## Downloading models
 
 The different available models, their performance stats and download links are
