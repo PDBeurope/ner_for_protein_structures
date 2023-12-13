@@ -4,7 +4,7 @@ import os
 import logging
 from datetime import datetime
 from pathlib import Path
-from bioc_xml_retrieval.europepmc_queries import fetch_bioc_xml
+from bioc_xml_tools.europepmc_queries import fetch_bioc_xml
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
