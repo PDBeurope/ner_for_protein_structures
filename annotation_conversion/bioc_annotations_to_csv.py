@@ -7,11 +7,6 @@ from annotation_conversion.xml_processing_tools import get_text_annos_from_xml_a
 from collections import defaultdict
 from tqdm import tqdm
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-
 def process_bioc_xml_file(input):
     """
     Extract the annotations from BioC XML file and return the ID of the
@@ -70,29 +65,17 @@ def process_bioc_xml_file(input):
                     elif found_span.startswith(" "):
                         st_ann_sp_new = st_ann_sp + 1
                         en_ann_sp_new = en_ann_sp + 1
-                        # logger.info(f"Reset annotation span to eliminate leading white space for annotation:")
-                        # cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)
-                        # logger.info(cur_anno)
                         anno_list_ext = [st_ann_sp_new-st_snt_sp, en_ann_sp_new-st_snt_sp, ann, ann_type, doc_section]
                         non_overlap[snt_text].append(anno_list_ext)
                         non_overlap_counter = non_overlap_counter + 1
                     elif found_span.startswith("("):
                         st_ann_sp_new = st_ann_sp + 1
                         en_ann_sp_new = en_ann_sp + 1
-                        # logger.info(f"Reset annotation span to eliminate leading parenthesis for annotation:")
-                        # cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)
-                        # logger.info(cur_anno)
                         anno_list_ext = [st_ann_sp_new-st_snt_sp, en_ann_sp_new-st_snt_sp, ann, ann_type, doc_section] 
                         non_overlap[snt_text].append(anno_list_ext)
                         non_overlap_counter = non_overlap_counter + 1
                     else:
-                        logger.info(f"Could not resolve annotation")
-                        # cur_anno = (found_span, ann)
-                        # logger.info(cur_anno)
-                        # logger.info(f"Start found for annotation span {st_ann_sp}")
-                        # logger.info(f"Start found for sentence span {st_snt_sp}")
-                        # logger.info(f"End found for annotation span {en_ann_sp}")
-                        # logger.info(f"End found for sentence span {en_snt_sp}")
+                        logging.info(f"Could not resolve annotation")
                         continue
 
     full_anno_list = []
@@ -117,7 +100,8 @@ def process_bioc_xml_file(input):
                 full_anno_list.append(anno_full)
                 
         except:
-            logger.warning(f"Found multiple entries for same sentence and annotation; only using first occurance")
+            logging.warning(f"""Found multiple entries for same sentence and
+                           annotation; only using first occurance""")
             for s in span_list:
                 anno_full = s + [sect_list_unique[0]]
                 full_anno_list.append(anno_full)
@@ -125,31 +109,34 @@ def process_bioc_xml_file(input):
 
     assert len(full_anno_list) == non_overlap_counter
     
-    logger.info(f"Total number of annotations processed for current publication: {non_overlap_counter}")
-    logger.info(f"Total number of sentences processed for current publication: {len(non_overlap)}")
-    logger.info(f"*" * 80)
+    logging.info(f"""Total number of annotations processed for current
+                publication: {non_overlap_counter}""")
+    logging.info(f"""Total number of sentences processed for current
+                publication: {len(non_overlap)}""")
+    logging.info(f"*" * 80)
 
     return doc_id, full_anno_list
 
 
 def make_annotation_csv(bioc_xml_dir, output_dir):
-    '''
+    """
     Iterate over the annotations in the returned list for the document and
     convert into a dataframe to save as tab-separated CSV file to disk
 
-    '''
+    """
 
     progress_bar_pub = tqdm(total=len(os.listdir(bioc_xml_dir)),
                                  desc = "Iterating over publications...")
     
     for file in os.listdir(bioc_xml_dir):
         if file.endswith(".xml"):
-            logger.info(f"Processing file {file}")
+            logging.info(f"Processing file {file}")
             input = os.path.join(bioc_xml_dir, file)
         
             doc_id, sent_anno_list = process_bioc_xml_file(input)
 
-            df = pd.DataFrame(sent_anno_list, columns=["anno_start", "anno_end", "anno_text", "entity_type", "sentence", "section"])
+            columns = ["anno_start", "anno_end", "anno_text", "entity_type", "sentence", "section"]
+            df = pd.DataFrame(sent_anno_list, columns = columns)
 
             full_out_path = output_dir
             output_csv = full_out_path + doc_id + ".csv"
@@ -159,7 +146,6 @@ def make_annotation_csv(bioc_xml_dir, output_dir):
         progress_bar_pub.update()
 
         
-
 def main():
 
     """
@@ -189,12 +175,12 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser(
-        description = "This script extracts the annotations from a BioC \n"
-                      "formatted XML file along with the sentence they belong \n"
-                      "to and writes them into a tab-separated CSV file with \n"
-                      "the following column labels: anno_start, anno_end, \n"
-                      "anno_text, entity_type, sentence, section; one one CSV \n"
-                      "file for each XML file"
+        description = """This script extracts the annotations from a BioC
+                      formatted XML file along with the sentence they belong
+                      to and writes them into a tab-separated CSV file with
+                      the following column labels: anno_start, anno_end,
+                      anno_text, entity_type, sentence, section; one one CSV
+                      file for each XML file"""
     )
     parser.add_argument(
                         "--bioc-xml-dir",
@@ -208,13 +194,13 @@ def main():
                         type = str,
                         default = os.getcwd(),
                         dest = "output_dir",
-                        help = "output directory to write results files to \n"
-                            "default = current directory"
+                        help = """output directory to write results files to
+                               default = current directory"""
     )
 
     args = parser.parse_args()
 
-    # parsing the command line input to make the PDBe query for search and filterterms
+    # parsing the command line input
     make_annotation_csv(args.bioc_xml_dir, args.output_dir)
     
 

@@ -11,7 +11,7 @@ Detailed descriptions can be found in their respective sections.
 Convert annotations in BioC formatted XML to CSV
 ------------------------------------------------
 
-.. autofunction:: ner_for_protein_structures.annotation_conversion.bioc_annotations_to_csv
+.. autofunction:: ner_for_protein_structures.annotation_conversion.bioc_annotations_to_csv.main
 
 
 Convert annotations in BioC formatted XML to JSON

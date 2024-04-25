@@ -6,9 +6,6 @@ from datetime import datetime
 from pathlib import Path
 from bioc_xml_tools.europepmc_queries import fetch_bioc_xml
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 def get_bioc_xml_from_pmc(pmcid_list, output_dir):
     """
     making a request to open access set at NCBI to retrieve BioC formatted XML
@@ -19,12 +16,12 @@ def get_bioc_xml_from_pmc(pmcid_list, output_dir):
         input_file = Path(pmcid_list)
         assert input_file.exists()
     except:
-        logger.error(f"No input file found")
+        logging.error(f"No input file found")
         pass
     # open the input file (list of PMCIDs)
     with open(input_file, "r") as f:
         input_list = f.readlines()
-    logger.info(f"Number of unique entries to fetch full text XML for: {len(input_list)}")
+    logging.info(f"Number of unique entries to fetch full text XML for: {len(input_list)}")
     # iterate over list of PMC IDs and make a request to NCBI BioNLP API to get
     # the XML text
     counter = 0
@@ -42,9 +39,9 @@ def get_bioc_xml_from_pmc(pmcid_list, output_dir):
                 f.write(result.content)
         except:
             # return an error if there is no open access XML found for a given PMC ID
-            logger.error(f"Could not get full text XML")
+            logging.error(f"Could not get full text XML")
             pass
-    logger.info(f"Final number of PubMed IDs processed: {counter}")
+    logging.info(f"Final number of PubMed IDs processed: {counter}")
 
     # return the list of dictionaries
     return
@@ -80,10 +77,10 @@ def main():
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "Parsing a list PMC IDs in TXT format to retrieve \n"
-                      "their associated full text XML by querying NCBI BioNLP API. \n"
-                      "Returns an XML file in BioC format for each PMC ID if the \n"
-                      "access for the ID is open."
+        description = """Parsing a list PMC IDs in TXT format to retrieve
+                      their associated full text XML by querying NCBI BioNLP API.
+                      Returns an XML file in BioC format for each PMC ID if the
+                      access for the ID is open."""
     )
     parser.add_argument(
                         "--pmcid-list",
@@ -97,8 +94,8 @@ def main():
                         type = str,
                         default = os.getcwd(),
                         dest = "output_dir",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = """output directory to write results files to
+                               default = current directory"""
     )
 
     args = parser.parse_args()

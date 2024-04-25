@@ -1,5 +1,3 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
 from bs4 import BeautifulSoup
 import en_core_sci_sm
@@ -11,10 +9,6 @@ import csv
 from nltk.tokenize import WordPunctTokenizer, wordpunct_tokenize
 from tqdm import tqdm
 import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 
 def split_into_sentences(paragraph, paragraph_start):
     """
@@ -145,13 +139,13 @@ def get_text_annos_from_xml(xml_in):
                 para_length = len(passage.find("text").text)
                 para_length_list.append(para_length)
         except:
-            logger.info(f"Could not get paragraph length")
+            logging.info(f"Could not get paragraph length")
         continue
 
     # print the number of annotations found in the BioC XML file
     xml_anno_list = [a for a in Bs_data.find_all("annotation")]
     anno_len = len(xml_anno_list)
-    logger.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
+    logging.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
 
     # the steps below of creating a dataframe and defining the start and end character positions was
     # necessary as there are gaps in the paragraph offset values picked from the BioC XML file;
@@ -313,13 +307,13 @@ def get_text_annos_from_xml_for_selected_sections(xml_in, annotator):
                         para_length = len(passage.find("text").text)
                         para_length_list.append(para_length)
         except:
-            logger.info(f"Could not get paragraph length")
+            logging.info(f"Could not get paragraph length")
         continue
 
     # print the number of annotations found in the BioC XML file
     xml_anno_list = [a for a in Bs_data.find_all("annotation")]
     anno_len = len(xml_anno_list)
-    logger.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
+    logging.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
 
 
     # the steps below of creating a dataframe and defining the start and end character positions was
@@ -445,7 +439,7 @@ def get_text_annos_from_xml_for_selected_sections(xml_in, annotator):
                         logging.info(f"Could not get passage text")
                     continue
         except:
-            logger.info(f"Could not get paragraphs for sections")
+            logging.info(f"Could not get paragraphs for sections")
         continue
 
     # flatten the list of sentences as it currently is a list of lists;
@@ -520,7 +514,7 @@ def get_text_annos_from_xml_as_json(xml_in):
                 para_length = len(passage.find("text").text)
                 para_length_list.append(para_length)
         except:
-            logger.warning(f"Could not get paragraph length")
+            logging.warning(f"Could not get paragraph length")
         continue
 
     # the steps below of creating a dataframe and defining the start and end character positions was
@@ -627,7 +621,7 @@ def get_text_annos_from_xml_as_json(xml_in):
 
     # print the number of annotations found in the BioC XML file
     anno_len = len(anno_list)
-    logger.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
+    logging.info(f"Number of annotations found in BioC XML file for processing: {anno_len}")
     return doc_id_ex, flat_list, anno_list
 
 
@@ -961,8 +955,3 @@ def convert_all_to_IOB(dictionary_dataset, path):
             for each_token in tagged_tokens:
                 all_writer.writerow(list(each_token))
             all_writer.writerow('')
-
-
-
-                    
-                        

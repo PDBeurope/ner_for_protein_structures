@@ -8,9 +8,6 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from ner_inference.inference_tools import make_hf_request
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
     """
     make predictions through Huggingface inference API on publications provided as
@@ -23,20 +20,20 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
         assert os.path.exists(xml_dir)
         content = os.listdir(xml_dir)
     except:
-        logger.error(f"No input directory found")
+        logging.error(f"No input directory found")
         pass
 
     # create model_name from repo
     repo_split = model_repo.split("/")
     model_name = repo_split[-1]
-    logger.info(f"Using model: {model_name}")
+    logging.info(f"Using model: {model_name}")
 
     date = datetime.strftime(datetime.now(), "%Y%m%d")
 
     # iterate over the BioC formatted XML files in the input directory
     for file in content:
         if file.endswith(".xml"):
-            logger.info(f"Working on input file {file}")
+            logging.info(f"Working on input file {file}")
             input = os.path.join(xml_dir, file)
 
             # using ElementTree to create an editable version of the input XML file
@@ -53,7 +50,7 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
                         para_length = len(passage.find("text").text)
                         para_length_list.append(para_length)
                     else:
-                        logger.error(f"Could not get paragraph length")
+                        logging.error(f"Could not get paragraph length")
                 except:
                     continue
 
@@ -111,9 +108,9 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
                                                                         "aggregation_strategy" : "first",})
 
 
-                        logger.info(f"Number of predictions for current passage: {len(pred)}")
+                        logging.info(f"Number of predictions for current passage: {len(pred)}")
                 except:
-                    logger.error(f"Did not receive predictions from Huggingface API for model {model_repo}")
+                    logging.error(f"Did not receive predictions from Huggingface API for model {model_repo}")
                         
                 try:
                     # iterate over the annotations found for the current passage
@@ -160,7 +157,7 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
 
                         id_counter = id_counter + 1
                 except:
-                    logger.error(f"Passage with offset {offset} does not contain text")
+                    logging.error(f"Passage with offset {offset} does not contain text")
                     continue
 
             # creating a new tree from the original tree and the annotations
@@ -221,36 +218,36 @@ def main():
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "This function contacts a specified model on Huggingface \n"
-                      "through the inference API for prediction. The model on \n"
-                      "Huggingface needs to be defined and an authentication \n"
-                      "token is required. The default model is \n"
-                      "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1. \n"
-                      "The input documents for which annotations are to be produced \n"
-                      "have to be provided through a pointer to the directory where \n"
-                      "they are kept. All documents have to be in BioC formatted XML. \n"
-                      "It is assumed that input BioC XML files have their file names \n"
-                      "starting with a unique ID, e.g. <PMC ID>, which will be reused\n"
-                      "to construct the output filename. Suggested naming convension\n"
-                      "for input file name is <date>_xml_<unique ID>"
+        description = """This function contacts a specified model on Huggingface
+                      through the inference API for prediction. The model on
+                      Huggingface needs to be defined and an authentication
+                      token is required. The default model is
+                      PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1.
+                      The input documents for which annotations are to be produced
+                      have to be provided through a pointer to the directory where
+                      they are kept. All documents have to be in BioC formatted XML.
+                      It is assumed that input BioC XML files have their file names
+                      starting with a unique ID, e.g. <PMC ID>, which will be reused
+                      to construct the output filename. Suggested naming convension
+                      for input file name is <date>_xml_<unique ID>"""
     )
     parser.add_argument(
                         "--xml-dir",
                         type = str,
                         default = None,
                         dest = "xml_dir",
-                        help = "Directory containing BioC XML files for annotation with a \n"
-                               "trained model; file names should follow the naming convention \n"
-                               "<date>_xml_<unique ID>",
+                        help = """Directory containing BioC XML files for annotation with a
+                               trained model; file names should follow the naming convention
+                               <date>_xml_<unique ID>"""
     )
     parser.add_argument(
                         "--model-repo",
                         type = str,
                         default = "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1",
                         dest = "model_repo",
-                        help = "Huggingface repo id holding a pre-trained model, e.g. \n"
-                               "PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1, \n"
-                               "which is the default"
+                        help = """Huggingface repo id holding a pre-trained model, e.g.
+                               PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1,
+                               which is the default"""
     )
     parser.add_argument(
                         "--auth-token",

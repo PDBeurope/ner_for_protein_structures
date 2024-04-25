@@ -7,11 +7,6 @@ from annotation_conversion.xml_processing_tools import get_text_annos_from_xml_a
 from collections import defaultdict
 from tqdm import tqdm
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-
 def process_bioc_xml_file(input):
     """
     Extract the annotations from BioC XML file and return the ID of the
@@ -72,29 +67,17 @@ def process_bioc_xml_file(input):
                     elif found_span.startswith(" "):
                         st_ann_sp_new = st_ann_sp + 1
                         en_ann_sp_new = en_ann_sp + 1
-                        # logger.info(f"Reset annotation span to eliminate leading white space for annotation:")
-                        # cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)
-                        # logger.info(cur_anno)
                         anno_list_ext = [st_ann_sp_new-st_snt_sp, en_ann_sp_new-st_snt_sp, ann, ann_type, doc_section]
                         non_overlap[snt_text].append(anno_list_ext)
                         non_overlap_counter = non_overlap_counter + 1
                     elif found_span.startswith("("):
                         st_ann_sp_new = st_ann_sp + 1
                         en_ann_sp_new = en_ann_sp + 1
-                        # logger.info(f"Reset annotation span to eliminate leading parenthesis for annotation:")
-                        # cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)
-                        # logger.info(cur_anno)
                         anno_list_ext = [st_ann_sp_new-st_snt_sp, en_ann_sp_new-st_snt_sp, ann, ann_type, doc_section] 
                         non_overlap[snt_text].append(anno_list_ext)
                         non_overlap_counter = non_overlap_counter + 1
                     else:
-                        logger.info(f"Could not resolve annotation")
-                        # cur_anno = (found_span, ann)
-                        # logger.info(cur_anno)
-                        # logger.info(f"Start found for annotation span {st_ann_sp}")
-                        # logger.info(f"Start found for sentence span {st_snt_sp}")
-                        # logger.info(f"End found for annotation span {en_ann_sp}")
-                        # logger.info(f"End found for sentence span {en_snt_sp}")
+                        logging.info(f"Could not resolve annotation")
                         continue
 
     sent_anno_list = []
@@ -121,7 +104,8 @@ def process_bioc_xml_file(input):
             sent_anno_list.append(sent_dict)
 
         except:
-            logger.info(f"Found multiple entries for same sentence and annotation; only using first occurance")
+            logging.info(f"""Found multiple entries for same sentence and
+                         annotation; only using first occurance""")
             sent_dict = {"sid" : i,
                     "sent" : k,
                     "section" : sect_list_unique[0],
@@ -131,19 +115,21 @@ def process_bioc_xml_file(input):
 
     assert len(sent_anno_list) == len(non_overlap)
     
-    logger.info(f"Total number of annotations processed for current publication: {non_overlap_counter}")
-    logger.info(f"Total number of sentences processed for current publication: {len(non_overlap)}")
-    logger.info(f"*" * 80)
+    logging.info(f"""Total number of annotations processed for current
+                 publication: {non_overlap_counter}""")
+    logging.info(f"""Total number of sentences processed for current
+                 publication: {len(non_overlap)}""")
+    logging.info(f"*" * 80)
 
     return doc_id, sent_anno_list
 
 
 def make_annotation_json(bioc_xml_dir, output_dir):
-    '''
+    """
     Iterate over the annotations in the returned list for the document and
     create a combined JSON file to save to disk
 
-    '''
+    """
     progress_bar_pub = tqdm(total=len(os.listdir(bioc_xml_dir)),
                                  desc = "Iterating over publications...")
 
@@ -151,7 +137,7 @@ def make_annotation_json(bioc_xml_dir, output_dir):
 
     for file in os.listdir(bioc_xml_dir):
         if file.endswith(".xml"):
-            logger.info(f"Processing file {file}")
+            logging.info(f"Processing file {file}")
             input = os.path.join(bioc_xml_dir, file)
         
             doc_id, sent_anno_list = process_bioc_xml_file(input)
@@ -170,7 +156,6 @@ def make_annotation_json(bioc_xml_dir, output_dir):
         outfile.write(json_object)
 
 
-        
 
 def main():
 
@@ -205,13 +190,13 @@ def main():
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "This script extracts the annotations from a BioC \n"
-                      "formatted XML file along with the sentence they \n"
-                      "belong to and writes them into a JSON file with the \n"
-                      "following keys: '<unique PubMedCentral ID>', \n"
-                      "'annotations', 'sid', 'sent', 'section', 'ner'; 'ner' \n"
-                      "contains a list of annotations for the sentence with ID \n"
-                      "'sid'"
+        description = """This script extracts the annotations from a BioC
+                      formatted XML file along with the sentence they
+                      belong to and writes them into a JSON file with the
+                      following keys: '<unique PubMedCentral ID>',
+                      'annotations', 'sid', 'sent', 'section', 'ner'; 'ner'
+                      contains a list of annotations for the sentence with ID
+                      'sid'"""
     )
     parser.add_argument(
                         "--bioc-xml-dir",
@@ -225,8 +210,8 @@ def main():
                         type = str,
                         default = os.getcwd(),
                         dest = "output_dir",
-                        help = "output directory to write results files to \n"
-                            "default = current directory"
+                        help = """output directory to write results files to
+                               default = current directory"""
     )
 
     args = parser.parse_args()

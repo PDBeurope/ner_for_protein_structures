@@ -1,12 +1,6 @@
-#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python
-
 # importing necessary modules/libraries
 import logging
 import requests
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 
 def fetch_bioc_xml(pmcid):
     """
@@ -34,5 +28,5 @@ def fetch_bioc_xml(pmcid):
     if result.ok:
         return result
     else:
-        logger.error(f"Query returned no result")
+        logging.error(f"Query returned no result")
 

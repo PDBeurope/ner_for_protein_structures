@@ -6,9 +6,6 @@ from datetime import datetime
 from pathlib import Path
 from sem_eval.performance_stats_from_IOB_pred_gt import semeval_report
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_dir):
     """
     open the various input files and check they exist; run SemEval evaluation and compare
@@ -20,7 +17,7 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
         gt_input = Path(iob_gt)
         assert gt_input.exists()
     except:
-        logger.error(f"No input file found")
+        logging.error(f"No input file found")
         pass
 
     try:
@@ -28,7 +25,7 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
         ann_input = Path(iob_ann)
         assert ann_input.exists()
     except:
-        logger.error(f"No annotated file found")
+        logging.error(f"No annotated file found")
         pass
 
     try:
@@ -38,7 +35,7 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
         with open(ent_types) as ent:
             ent_list = ent.readlines()
     except:
-        logger.error(f"No input file with entity types found")
+        logging.error(f"No input file with entity types found")
         pass
 
     try:
@@ -53,9 +50,9 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
     try:
         report = semeval_report(gold_path = gt_input, response_path = ann_input,
                        validate_label = validate_labels, targets = ent_list_clean)
-        logger.info(f"Finished evaluation")
+        logging.info(f"Finished evaluation")
     except:
-        logger.error(f"Could not get scores")
+        logging.error(f"Could not get scores")
         pass
 
     try:
@@ -64,10 +61,8 @@ def run_semeval_analysis(iob_gt, iob_ann, validate_labels, entity_types, output_
         with open(output, "w") as f:
             f.write(report)
     except:
-        logger.error(f"Could not write output")
+        logging.error(f"Could not write output")
         pass
-
-
 
 def main():
     """
@@ -117,58 +112,58 @@ def main():
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "This tool runs the SemEval evaluation script to calculate \n"
-                      "performance statistics as precision, recall and F1 measure \n"
-                      "for annotations coming from either an automatic system in \n"
-                      "form of predictions, or as manually created annotations. \n"
-                      "The details for the evaluation process have been published \n"
-                      "here: https://aclanthology.org/S13-2056.pdf. Two IOB \n"
-                      "formatted input files of word tokesn and corresponding \n"
-                      "labels have to be provided. One of the files represents \n"
-                      "the ground truth/gold standard to compare against. The \n"
-                      "other one contains the predicted/manually created annotations."
+        description = """This tool runs the SemEval evaluation script to calculate
+                      performance statistics as precision, recall and F1 measure
+                      for annotations coming from either an automatic system in
+                      form of predictions, or as manually created annotations.
+                      The details for the evaluation process have been published
+                      here: https://aclanthology.org/S13-2056.pdf. Two IOB
+                      formatted input files of word tokesn and corresponding
+                      labels have to be provided. One of the files represents
+                      the ground truth/gold standard to compare against. The
+                      other one contains the predicted/manually created annotations."""
     )
     parser.add_argument(
                         "--ground-truth-IOB",
                         type = str,
                         default = None,
                         dest = "iob_gt",
-                        help = "path to tab-separated ground truth CSV file \n"
-                               "containing sentences and annotations in IOB format",
+                        help = """path to tab-separated ground truth CSV file
+                               containing sentences and annotations in IOB format"""
     )
     parser.add_argument(
                         "--annotated-IOB",
                         type = str,
                         default = None,
                         dest = "iob_ann",
-                        help = "path to tab-separated CSV file to compare against \n"
-                               "ground truth containing sentences and annotations \n"
-                               "in IOB format"
+                        help = """path to tab-separated CSV file to compare against
+                               ground truth containing sentences and annotations
+                               in IOB format"""
     )
     parser.add_argument(
                         "--validate-labels",
                         type = str,
                         default = None,
                         dest = "validate_labels",
-                        help = "True/False Boulean label on whether or not to \n"
-                               "check label integrity; default: True"
+                        help = """True/False Boulean label on whether or not to
+                               check label integrity; default: True"""
     )
     parser.add_argument(
                         "--entity-types",
                         type = str,
                         default=None,
                         dest = "entity_types",
-                        help = "path to .TXT file containg the entity type \n"
-                               "labels that were used to generate the IOB \n"
-                               "formatted data files"
+                        help = """path to .TXT file containg the entity type
+                               labels that were used to generate the IOB
+                               formatted data files"""
     )
     parser.add_argument(
                         "--output-dir",
                         type = str,
                         default = os.getcwd(),
                         dest = "output_dir",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = """output directory to write results files to
+                               default = current directory"""
     )
     args = parser.parse_args()
 

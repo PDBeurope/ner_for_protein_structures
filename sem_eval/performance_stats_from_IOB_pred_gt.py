@@ -28,9 +28,6 @@ Spurius (SPU) : the system labels an entity that does not exist in the gold-stan
 
 """
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 Entity = namedtuple('Entity', ['span', 'tag'])
 Entity_Label = namedtuple('Label', ['index', 'pos', 'tag'])
 
@@ -123,14 +120,14 @@ def validate_label_seq(label_seq: List[str], ground_data: List[str] = None) -> b
         else:
             pos, tag = label.split('-')
             if pos not in ('B', 'I'):
-                logger.warning(f'expect label starts with B or I but got: {label}')
+                logging.warning(f"expect label starts with B or I but got: {label}")
                 return False
         if pos == 'I':
             if prev_pos == 'O':
-                logger.warning(f'invalid label sequence, I comes after O: {list(zip(label_seq, ground_data)) if ground_data else label_seq}')
+                logging.warning(f"invalid label sequence, I comes after O: {list(zip(label_seq, ground_data)) if ground_data else label_seq}")
                 return False
             if prev_pos in ('B', 'I') and prev_tag != tag:
-                logger.warning(f'invalid label sequence, tag inconsistent: {list(zip(label_seq, ground_data)) if ground_data else label_seq}')
+                logging.warning(f"invalid label sequence, tag inconsistent: {list(zip(label_seq, ground_data)) if ground_data else label_seq}")
                 return False
         prev_pos, prev_tag = pos, tag
     return True
@@ -255,7 +252,7 @@ def agreement_dataset(gold: List[List[str]], response: List[List[str]],
             try:
                 validate_label_seq(response[i], ground_data)
             except:
-                logger.error(f"Could not validate label sequence between predictions and ground truth")
+                logging.error(f"Could not validate label sequence between predictions and ground truth")
 
         entities_gold = extract_entity(label_seq_gold, i, 'gold')
         entities_resp = extract_entity(response[i], i, 'response')
@@ -402,7 +399,7 @@ def precision_score(correct: int, incorrect: int, partial: int, spurious: int) -
     try:
         precision  = numerator/denominator
     except ZeroDivisionError:
-        logger.error(f"Could not determine precision score")
+        logging.error(f"Could not determine precision score")
         precision = 0
         pass
     return precision
@@ -436,7 +433,7 @@ def recall_score(correct: int, incorrect: int, partial: int, missing: int) -> fl
     try:
         recall = numerator/denominator
     except ZeroDivisionError:
-        logger.error(f"Could not determine recall score")
+        logging.error(f"Could not determine recall score")
         recall = 0
         pass
 
@@ -468,7 +465,7 @@ def f1_score(precision: float, recall: float, beta: float = 1.0) -> float:
     try:
         f1 = numerator/denominator
     except ZeroDivisionError:
-        logger.error(f"Could not determine F1 score")
+        logging.error(f"Could not determine F1 score")
         f1 = 0
         pass
     
@@ -548,14 +545,14 @@ def semeval_report(gold_path: str, response_path: str, targets: List[str] = None
     # open the ground truth data and reformat to have nested list for sentences
     # and tokens; and check the number of sentences in it
     gold_data, gold_labels = load_IOBdataset(gold_path, targets=targets)
-    logger.info(f"Number of samples in ground truth data: {len(gold_data)}")
-    logger.info(f"Number of ground truth labels: {len(gold_labels)}")
+    logging.info(f"Number of samples in ground truth data: {len(gold_data)}")
+    logging.info(f"Number of ground truth labels: {len(gold_labels)}")
 
     # open the predicted/manually created data and reformat to have nested list
     # for sentences and tokens; and check the number of sentences in it
     resp_data, resp_labels = load_IOBdataset(response_path, targets=targets)
-    logger.info(f"Number of samples in predicted data: {len(resp_data)}")
-    logger.info(f"Number of predicted labels: {len(resp_labels)}")
+    logging.info(f"Number of samples in predicted data: {len(resp_data)}")
+    logging.info(f"Number of predicted labels: {len(resp_labels)}")
 
 
     # flatten the gold data sentences to no longer be a list of strings
@@ -587,7 +584,7 @@ def semeval_report(gold_path: str, response_path: str, targets: List[str] = None
     # values in the new dataframe after merging
     nan_mask = pd.isnull(merged_df).any(axis=1)
     merged_na = merged_df[nan_mask]
-    logger.info(f"Number of rows/sentences with NaN: {len(merged_na)}")
+    logging.info(f"Number of rows/sentences with NaN: {len(merged_na)}")
 
     # define two functions to run over the respective columns for ground truth/
     # gold standard as well as the predicted/manually created data; this is to
@@ -628,8 +625,8 @@ def semeval_report(gold_path: str, response_path: str, targets: List[str] = None
     gold_labels = merged_df["gold_labels"].to_list()
     resp_labels = merged_df["resp_labels"].to_list()
 
-    logger.info(f"Length of final ground truth labels: {len(gold_labels)}")
-    logger.info(f"Length of final predicted labels: {len(resp_labels)}")
+    logging.info(f"Length of final ground truth labels: {len(gold_labels)}")
+    logging.info(f"Length of final predicted labels: {len(resp_labels)}")
     
     # check whether label validation has been set
     if validate_label:

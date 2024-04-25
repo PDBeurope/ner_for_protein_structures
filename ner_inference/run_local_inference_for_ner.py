@@ -10,9 +10,6 @@ from transformers import PreTrainedTokenizerFast
 from transformers import pipeline
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
     """
     make predictions using a local model on publications provided as
@@ -25,16 +22,16 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
         assert os.path.exists(xml_dir)
         content = os.listdir(xml_dir)
     except:
-        logger.error(f"No input directory found")
+        logging.error(f"No input directory found")
         pass
 
     try:
         # check whether the model directory exists
         assert os.path.exists(model_dir)
         model = AutoModelForTokenClassification.from_pretrained(model_dir)
-        logger.info(f"Instantiated the model")
+        logging.info(f"Instantiated the model")
     except:
-        logger.error(f"No model directory found")
+        logging.error(f"No model directory found")
         pass
 
     try:
@@ -44,16 +41,16 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
                                           batch_size = 4,
                                           truncation = True)
         assert isinstance(tokenizer, PreTrainedTokenizerFast)
-        logger.info(f"Instantiated the tokenizer")
+        logging.info(f"Instantiated the tokenizer")
     except:
-        logger.error(f"Could not load tokenizer")
+        logging.error(f"Could not load tokenizer")
 
     date = datetime.strftime(datetime.now(), "%Y%m%d")
 
     # iterate over the BioC formatted XML files in the input directory
     for file in content:
         if file.endswith(".xml"):
-            logger.info(f"Working on input file {file}")
+            logging.info(f"Working on input file {file}")
             input = os.path.join(xml_dir, file)
 
             # using ElementTree to create an editable version of the input XML file
@@ -70,7 +67,7 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
                         para_length = len(passage.find("text").text)
                         para_length_list.append(para_length)
                     else:
-                        logger.error(f"Could not get paragraph length")
+                        logging.error(f"Could not get paragraph length")
                 except:
                     continue
 
@@ -129,9 +126,9 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
                                     aggregation_strategy = "first")
                         # make predictions with the local model
                         pred = ner([paragraph])
-                        logger.info(f"Number of predictions for current passage: {len(pred[0])}")
+                        logging.info(f"Number of predictions for current passage: {len(pred[0])}")
                 except:
-                    logger.error(f"Was not able to make predictions with current model {model_name}")
+                    logging.error(f"Was not able to make predictions with current model {model_name}")
                         
                 try:
                     # iterate over the annotations found for the current passage
@@ -178,7 +175,7 @@ def run_local_inference_for_ner(xml_dir, model_dir, model_name, output_dir):
 
                         id_counter = id_counter + 1
                 except:
-                    logger.error(f"Passage with offset {offset} does not contain text")
+                    logging.error(f"Passage with offset {offset} does not contain text")
                     continue
 
             # creating a new tree from the original tree and the annotations
@@ -240,19 +237,19 @@ def main():
     logging.basicConfig(level=logging.INFO)
     
     parser = argparse.ArgumentParser(
-        description = "This function annotates BioC formatted XML files of \n"
-                      "publications for named entities using a trained model \n"
-                      "stored locally. The input documents for which annotations \n"
-                      "are to be produced have to be provided through a pointer \n"
-                      "to the directory where they are kept. All documents have \n"
-                      "to be in BioC formatted XML. It is assumed that input BioC \n"
-                      "XML files have their file names starting with a unique ID, \n"
-                      "e.g. <PMC ID>, which will be reused to construct the output \n"
-                      "filename. Suggested naming convension for input file name is \n"
-                      "<date>_xml_<unique ID>. A pointer to the model locally has to \n"
-                      "be provided. The model directory name is assumed to match the \n"
-                      "one for the remote location on Huggingface, \n"
-                      "e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1."
+        description = """This function annotates BioC formatted XML files of
+                      publications for named entities using a trained model
+                      stored locally. The input documents for which annotations
+                      are to be produced have to be provided through a pointer
+                      to the directory where they are kept. All documents have
+                      to be in BioC formatted XML. It is assumed that input BioC
+                      XML files have their file names starting with a unique ID,
+                      e.g. <PMC ID>, which will be reused to construct the output
+                      filename. Suggested naming convension for input file name is
+                      <date>_xml_<unique ID>. A pointer to the model locally has to
+                      be provided. The model directory name is assumed to match the
+                      one for the remote location on Huggingface,
+                      e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1."""
     )
     parser.add_argument(
                         "--xml-dir",
@@ -280,8 +277,8 @@ def main():
                         type = str,
                         default = os.getcwd(),
                         dest = "output_dir",
-                        help = "output directory to write results files to \n"
-                               "default = current directory"
+                        help = """output directory to write results files to
+                               default = current directory"""
     )
 
     args = parser.parse_args()
