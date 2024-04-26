@@ -44,5 +44,5 @@ ner_venv/
 ###############################
 ner_for_protein_structures.egg-info/
 *.pyc
-__pychage__/
+__pychache__/
 
