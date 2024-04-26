@@ -54,3 +54,9 @@ Running SemEval to calculate performance statistics
 ---------------------------------------------------
 
 .. autofunction:: ner_for_protein_structures.sem_eval.run_semeval_analysis.main
+
+
+Converting EuropePMC/JATS style XML to BioC XML
+-----------------------------------------------
+
+.. autofunction:: ner_for_protein_structures.bioc_xml_tools.pmcxml_to_biocxml:main
