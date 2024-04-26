@@ -3,7 +3,8 @@ Data Preparation
 ================
 
 .. _get-publications:
-## Prepare some data ##
+Prepare some data
+-----------------
 
 The scripts are based on BioC formatted XML versions of scientific publications.
 Details about the BioC format can be found here:
@@ -14,7 +15,8 @@ or they have been predicted using one of the four models that have been
 developed and are described in the associated publication.
 
 
-## Downloading BioC XML files from an open access collection ##
+Downloading BioC XML files from an open access collection
+---------------------------------------------------------
 
 For any scientific publication that may contain structural information and that
 is open access, one can download a BioC formatted XML version through an FTP

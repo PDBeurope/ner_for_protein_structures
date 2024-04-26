@@ -3,13 +3,17 @@ Getting Started
 ===============
 
 
-**ner_for_protein_structures** package is published alongside a scientific publication describing the
-development of a human-in-the-loop named entity recognition algorithm specific
-for protein structures.
+**ner_for_protein_structures** package is published alongside a scientific publication
+describing the development of a human-in-the-loop named entity recognition algorithm
+specific for protein structures.
 
 Here we provide a number of command line tools to convert annotations found in
 BioC formatted XML files, as they have been exported from our annotation tool
-TeamTat (https://www.teamtat.org/), into other formats.
+TeamTat (https://www.teamtat.org/), into other formats. The BioC format is the
+core data format for the publications as XML text. It was developed by the
+BioCreative Initiative and is documented here (https://bioc.sourceforge.net/).
+We also provide a tool to calculate performance statistics following the
+SemEval procedure (`SemEval <https://aclanthology.org/S13-2056.pdf>`_).
 
 Installation
 ------------
