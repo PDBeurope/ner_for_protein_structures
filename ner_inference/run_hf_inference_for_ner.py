@@ -165,8 +165,7 @@ def run_inference_for_ner(xml_dir, model_repo, auth_token, output_dir):
 
             # defining output file name
             split_1 = file.split(".")
-            split_2 = split_1[0].split("_")
-            outname = split_2[-1] + "_" + model_name + "_" + date + ".xml"
+            outname = split_1[0] + "_" + model_name + "_" + date + ".xml"
             out = output_dir + outname
 
             # writing new BioC formatted XML file with annotations to disk
