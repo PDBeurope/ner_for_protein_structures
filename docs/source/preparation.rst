@@ -42,6 +42,7 @@ The downloaded files will be named `"<date>_xml_<unique PMC ID>.xml"`
     ner_for_protein_structures.get_bioc_xml_from_pmc --pmcid-list=test/data/pmcid_list_for_ftp_retrieval.txt --output-dir=test/results/BioC_XML_from_FTP/
 
 
+
 Conversion of EuropePMC or JATS style XML to BioC style XML
 -----------------------------------------------------------
 
@@ -51,6 +52,7 @@ XML, as for example after downloading an open access paper from EuropePMC,
 then this publication can be formatted to BioC using the tool below. The
 input for this tool is a directory holding JATS style XML files. Returned
 are BioC style XML files in a specified output directory.
+
 
 **Example**
 
