@@ -29,10 +29,7 @@
           <div class="body" role="main">
             
   <h1>Source code for ner_for_protein_structures.annotation_conversion.bioc_annotations_to_json</h1><div class="highlight"><pre>
-<span></span><span class="ch">#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python</span>
-
-<span class="c1"># importing necessary modules/libraries</span>
-
+<span></span><span class="c1"># importing necessary modules/libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -40,11 +37,6 @@
 <span class="kn">from</span> <span class="nn">annotation_conversion.xml_processing_tools</span> <span class="kn">import</span> <span class="n">get_text_annos_from_xml_as_json</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
 
 <span class="k">def</span> <span class="nf">process_bioc_xml_file</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -106,29 +98,17 @@
                     <span class="k">elif</span> <span class="n">found_span</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
                         <span class="n">st_ann_sp_new</span> <span class="o">=</span> <span class="n">st_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
                         <span class="n">en_ann_sp_new</span> <span class="o">=</span> <span class="n">en_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
-                        <span class="c1"># logger.info(f&quot;Reset annotation span to eliminate leading white space for annotation:&quot;)</span>
-                        <span class="c1"># cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)</span>
-                        <span class="c1"># logger.info(cur_anno)</span>
                         <span class="n">anno_list_ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">st_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">en_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">ann</span><span class="p">,</span> <span class="n">ann_type</span><span class="p">,</span> <span class="n">doc_section</span><span class="p">]</span>
                         <span class="n">non_overlap</span><span class="p">[</span><span class="n">snt_text</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anno_list_ext</span><span class="p">)</span>
                         <span class="n">non_overlap_counter</span> <span class="o">=</span> <span class="n">non_overlap_counter</span> <span class="o">+</span> <span class="mi">1</span>
                     <span class="k">elif</span> <span class="n">found_span</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">):</span>
                         <span class="n">st_ann_sp_new</span> <span class="o">=</span> <span class="n">st_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
                         <span class="n">en_ann_sp_new</span> <span class="o">=</span> <span class="n">en_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
-                        <span class="c1"># logger.info(f&quot;Reset annotation span to eliminate leading parenthesis for annotation:&quot;)</span>
-                        <span class="c1"># cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)</span>
-                        <span class="c1"># logger.info(cur_anno)</span>
                         <span class="n">anno_list_ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">st_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">en_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">ann</span><span class="p">,</span> <span class="n">ann_type</span><span class="p">,</span> <span class="n">doc_section</span><span class="p">]</span> 
                         <span class="n">non_overlap</span><span class="p">[</span><span class="n">snt_text</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anno_list_ext</span><span class="p">)</span>
                         <span class="n">non_overlap_counter</span> <span class="o">=</span> <span class="n">non_overlap_counter</span> <span class="o">+</span> <span class="mi">1</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not resolve annotation&quot;</span><span class="p">)</span>
-                        <span class="c1"># cur_anno = (found_span, ann)</span>
-                        <span class="c1"># logger.info(cur_anno)</span>
-                        <span class="c1"># logger.info(f&quot;Start found for annotation span {st_ann_sp}&quot;)</span>
-                        <span class="c1"># logger.info(f&quot;Start found for sentence span {st_snt_sp}&quot;)</span>
-                        <span class="c1"># logger.info(f&quot;End found for annotation span {en_ann_sp}&quot;)</span>
-                        <span class="c1"># logger.info(f&quot;End found for sentence span {en_snt_sp}&quot;)</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not resolve annotation&quot;</span><span class="p">)</span>
                         <span class="k">continue</span>
 
     <span class="n">sent_anno_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -155,7 +135,8 @@
             <span class="n">sent_anno_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sent_dict</span><span class="p">)</span>
 
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found multiple entries for same sentence and annotation; only using first occurance&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Found multiple entries for same sentence and</span>
+<span class="s2">                         annotation; only using first occurance&quot;&quot;&quot;</span><span class="p">)</span>
             <span class="n">sent_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sid&quot;</span> <span class="p">:</span> <span class="n">i</span><span class="p">,</span>
                     <span class="s2">&quot;sent&quot;</span> <span class="p">:</span> <span class="n">k</span><span class="p">,</span>
                     <span class="s2">&quot;section&quot;</span> <span class="p">:</span> <span class="n">sect_list_unique</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -165,19 +146,21 @@
 
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent_anno_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span>
     
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of annotations processed for current publication: </span><span class="si">{</span><span class="n">non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of sentences processed for current publication: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Total number of annotations processed for current</span>
+<span class="s2">                 publication: </span><span class="si">{</span><span class="n">non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Total number of sentences processed for current</span>
+<span class="s2">                 publication: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">doc_id</span><span class="p">,</span> <span class="n">sent_anno_list</span>
 
 
 <span class="k">def</span> <span class="nf">make_annotation_json</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Iterate over the annotations in the returned list for the document and</span>
 <span class="sd">    create a combined JSON file to save to disk</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">progress_bar_pub</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">)),</span>
                                  <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;Iterating over publications...&quot;</span><span class="p">)</span>
 
@@ -185,7 +168,7 @@
 
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xml&quot;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">input</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         
             <span class="n">doc_id</span><span class="p">,</span> <span class="n">sent_anno_list</span> <span class="o">=</span> <span class="n">process_bioc_xml_file</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
@@ -204,7 +187,6 @@
         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_object</span><span class="p">)</span>
 
 
-        
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../functions.html#ner_for_protein_structures.annotation_conversion.bioc_annotations_to_json.main">[docs]</a>
@@ -241,13 +223,13 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
     
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;This script extracts the annotations from a BioC </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;formatted XML file along with the sentence they </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;belong to and writes them into a JSON file with the </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;following keys: &#39;&lt;unique PubMedCentral ID&gt;&#39;, </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;&#39;annotations&#39;, &#39;sid&#39;, &#39;sent&#39;, &#39;section&#39;, &#39;ner&#39;; &#39;ner&#39; </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;contains a list of annotations for the sentence with ID </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;&#39;sid&#39;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;This script extracts the annotations from a BioC</span>
+<span class="s2">                      formatted XML file along with the sentence they</span>
+<span class="s2">                      belong to and writes them into a JSON file with the</span>
+<span class="s2">                      following keys: &#39;&lt;unique PubMedCentral ID&gt;&#39;,</span>
+<span class="s2">                      &#39;annotations&#39;, &#39;sid&#39;, &#39;sent&#39;, &#39;section&#39;, &#39;ner&#39;; &#39;ner&#39;</span>
+<span class="s2">                      contains a list of annotations for the sentence with ID</span>
+<span class="s2">                      &#39;sid&#39;&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--bioc-xml-dir&quot;</span><span class="p">,</span>
@@ -261,8 +243,8 @@
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;output_dir&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to </span><span class="se">\n</span><span class="s2">&quot;</span>
-                            <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;output directory to write results files to</span>
+<span class="s2">                               default = current directory&quot;&quot;&quot;</span>
     <span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>

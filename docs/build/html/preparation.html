@@ -33,15 +33,18 @@
             
   <section id="data-preparation">
 <h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading">¶</a></h1>
-<p id="get-publications">## Prepare some data</p>
+<section id="prepare-some-data">
+<span id="get-publications"></span><h2>Prepare some data<a class="headerlink" href="#prepare-some-data" title="Link to this heading">¶</a></h2>
 <p>The scripts are based on BioC formatted XML versions of scientific publications.
 Details about the BioC format can be found here:</p>
 <p>It is also assumed that the annotations have been created by either manual
 annotation using TeamTat (<a class="reference external" href="https://www.teamtat.org/">https://www.teamtat.org/</a>) and downloaded as BioC XML
 or they have been predicted using one of the four models that have been
 developed and are described in the associated publication.</p>
-<p>## Downloading BioC XML files from an open access collection
-For any scientific publication that may contain structural information and that
+</section>
+<section id="downloading-bioc-xml-files-from-an-open-access-collection">
+<h2>Downloading BioC XML files from an open access collection<a class="headerlink" href="#downloading-bioc-xml-files-from-an-open-access-collection" title="Link to this heading">¶</a></h2>
+<p>For any scientific publication that may contain structural information and that
 is open access, one can download a BioC formatted XML version through an FTP
 service provided by the National Center for Biotechnology Information (NCBI).
 The site can be found here:
@@ -52,11 +55,26 @@ PubMedCentral IDs.</p>
 in BioC XML from this FTP site given a list of PubMedCentral IDs. PubMedCentral
 IDs are constructed of a 3-letter source identifier “PMC” and a multi-digit
 numerical part, e.g. “PMC4784909”. The example here refers to the publication
-<a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4784909/">The Structural Basis of Coenzyme A Recycling in a Bacterial Organelle</a>. The downloaded files will be named <cite>“&lt;date&gt;_xml_&lt;unique PMC ID&gt;.xml”</cite></p>
+<a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4784909/">The Structural Basis of Coenzyme A Recycling in a Bacterial Organelle</a>.
+The downloaded files will be named <cite>“&lt;date&gt;_xml_&lt;unique PMC ID&gt;.xml”</cite></p>
 <p><strong>Example</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.get_bioc_xml_from_pmc<span class="w"> </span>--pmcid-list<span class="o">=</span>test/data/pmcid_list_for_ftp_retrieval.txt<span class="w"> </span>--output-dir<span class="o">=</span>test/results/BioC_XML_from_FTP/
 </pre></div>
 </div>
+</section>
+<section id="conversion-of-europepmc-or-jats-style-xml-to-bioc-style-xml">
+<h2>Conversion of EuropePMC or JATS style XML to BioC style XML<a class="headerlink" href="#conversion-of-europepmc-or-jats-style-xml-to-bioc-style-xml" title="Link to this heading">¶</a></h2>
+<p>In order to be able to make predictions, the publication text needs to be
+provided in BioC format. If publication text is only available in JATS
+XML, as for example after downloading an open access paper from EuropePMC,
+then this publication can be formatted to BioC using the tool below. The
+input for this tool is a directory holding JATS style XML files. Returned
+are BioC style XML files in a specified output directory.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ner_for_protein_structures.pmcxml_to_biocxml<span class="w"> </span>--pmcxml-dir<span class="o">=</span>test/data/JATS_xml/<span class="w"> </span>--output-dir<span class="o">=</span>test/results/JATS_to_BioC/
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -80,7 +98,12 @@ numerical part, e.g. “PMC4784909”. The example here refers to the publicatio
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-some-data">Prepare some data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-bioc-xml-files-from-an-open-access-collection">Downloading BioC XML files from an open access collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conversion-of-europepmc-or-jats-style-xml-to-bioc-style-xml">Conversion of EuropePMC or JATS style XML to BioC style XML</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="conversions.html">Conversion of BioC formatted annotations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predictions.html">Make predictions on un-annotated BioC XML files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>

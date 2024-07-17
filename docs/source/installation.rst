@@ -79,3 +79,12 @@ Huggingface as in the example below.
 Alternatively, the models can be accessed through Huggingface's inference API.
 This option does require a Huggingface account and an authentication token. The
 details on how to register and how to set up the token can be found on `Huggingface <https://huggingface.co/>`_
+
+
+
+Annotation handbook and TeamTat user guide
+------------------------------------------
+
+The annotation handbook with details on how to annotate different entity types
+and the user guide on the annotation tool TeamTat have been made available and
+can be found here: `Annotation handbook and user guide <docs/user_guide_and_annotation_handbook_to_Sci_Data_v2.pdf>`_

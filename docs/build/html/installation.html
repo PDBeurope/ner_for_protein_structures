@@ -33,12 +33,16 @@
             
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
-<p><strong>ner_for_protein_structures</strong> package is published alongside a scientific publication describing the
-development of a human-in-the-loop named entity recognition algorithm specific
-for protein structures.</p>
+<p><strong>ner_for_protein_structures</strong> package is published alongside a scientific publication
+describing the development of a human-in-the-loop named entity recognition algorithm
+specific for protein structures.</p>
 <p>Here we provide a number of command line tools to convert annotations found in
 BioC formatted XML files, as they have been exported from our annotation tool
-TeamTat (<a class="reference external" href="https://www.teamtat.org/">https://www.teamtat.org/</a>), into other formats.</p>
+TeamTat (<a class="reference external" href="https://www.teamtat.org/">https://www.teamtat.org/</a>), into other formats. The BioC format is the
+core data format for the publications as XML text. It was developed by the
+BioCreative Initiative and is documented here (<a class="reference external" href="https://bioc.sourceforge.net/">https://bioc.sourceforge.net/</a>).
+We also provide a tool to calculate performance statistics following the
+SemEval procedure (<a class="reference external" href="https://aclanthology.org/S13-2056.pdf">SemEval</a>).</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>Clone the repository from the <a class="reference external" href="git&#64;github.com:PDBeurope/ner_for_protein_structures.git">source code</a> on Github:</p>
@@ -82,6 +86,12 @@ Huggingface as in the example below.</p>
 This option does require a Huggingface account and an authentication token. The
 details on how to register and how to set up the token can be found on <a class="reference external" href="https://huggingface.co/">Huggingface</a></p>
 </section>
+<section id="annotation-handbook-and-teamtat-user-guide">
+<h2>Annotation handbook and TeamTat user guide<a class="headerlink" href="#annotation-handbook-and-teamtat-user-guide" title="Link to this heading">¶</a></h2>
+<p>The annotation handbook with details on how to annotate different entity types
+and the user guide on the annotation tool TeamTat have been made available and
+can be found here: <a class="reference external" href="docs/user_guide_and_annotation_handbook_to_Sci_Data_v2.pdf">Annotation handbook and user guide</a></p>
+</section>
 </section>
 
 
@@ -106,6 +116,7 @@ details on how to register and how to set up the token can be found on <a class=
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#downloading-and-setting-up-models">Downloading and setting up models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#annotation-handbook-and-teamtat-user-guide">Annotation handbook and TeamTat user guide</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>

@@ -29,39 +29,42 @@
           <div class="body" role="main">
             
   <h1>Source code for ner_for_protein_structures.ner_inference.run_hf_inference_for_ner</h1><div class="highlight"><pre>
-<span></span><span class="ch">#! /Users/melaniev/Documents/code/ner_for_protein_structures/ner_venv/bin/python</span>
-
+<span></span>
+<span class="c1">#  importing necessary modules/librarie</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">ner_inference.inference_tools</span> <span class="kn">import</span> <span class="n">make_hf_request</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
 <span class="k">def</span> <span class="nf">run_inference_for_ner</span><span class="p">(</span><span class="n">xml_dir</span><span class="p">,</span> <span class="n">model_repo</span><span class="p">,</span> <span class="n">auth_token</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    make predictions through Huggingface inference API on publications provided as</span>
+<span class="sd">    BioC formatted XML; model for inference can be specified and a authentication</span>
+<span class="sd">    token is required; returns BioC XML of the publication with annotations and</span>
+<span class="sd">    saves them to disk in specified output directory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># check whether the input directory exists</span>
         <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">xml_dir</span><span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">xml_dir</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input directory found&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input directory found&quot;</span><span class="p">)</span>
         <span class="k">pass</span>
 
     <span class="c1"># create model_name from repo</span>
     <span class="n">repo_split</span> <span class="o">=</span> <span class="n">model_repo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
     <span class="n">model_name</span> <span class="o">=</span> <span class="n">repo_split</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># iterate over the BioC formatted XML files in the input directory</span>
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xml&quot;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Working on input file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Working on input file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">input</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xml_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
             <span class="c1"># using ElementTree to create an editable version of the input XML file</span>
@@ -78,7 +81,7 @@
                         <span class="n">para_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">passage</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
                         <span class="n">para_length_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para_length</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get paragraph length&quot;</span><span class="p">)</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get paragraph length&quot;</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">continue</span>
 
@@ -136,9 +139,9 @@
                                                                         <span class="s2">&quot;aggregation_strategy&quot;</span> <span class="p">:</span> <span class="s2">&quot;first&quot;</span><span class="p">,})</span>
 
 
-                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of predictions for current passage: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of predictions for current passage: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Did not receive predictions from Huggingface API for model </span><span class="si">{</span><span class="n">model_repo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Did not receive predictions from Huggingface API for model </span><span class="si">{</span><span class="n">model_repo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                         
                 <span class="k">try</span><span class="p">:</span>
                     <span class="c1"># iterate over the annotations found for the current passage</span>
@@ -185,7 +188,7 @@
 
                         <span class="n">id_counter</span> <span class="o">=</span> <span class="n">id_counter</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Passage with offset </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2"> does not contain text&quot;</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Passage with offset </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2"> does not contain text&quot;</span><span class="p">)</span>
                     <span class="k">continue</span>
 
             <span class="c1"># creating a new tree from the original tree and the annotations</span>
@@ -193,8 +196,7 @@
 
             <span class="c1"># defining output file name</span>
             <span class="n">split_1</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-            <span class="n">split_2</span> <span class="o">=</span> <span class="n">split_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
-            <span class="n">outname</span> <span class="o">=</span> <span class="n">split_2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;.xml&quot;</span>
+            <span class="n">outname</span> <span class="o">=</span> <span class="n">split_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;.xml&quot;</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="n">outname</span>
 
             <span class="c1"># writing new BioC formatted XML file with annotations to disk</span>
@@ -207,34 +209,84 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../functions.html#ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.main">[docs]</a>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function contacts a specified model on Huggingface through the</span>
+<span class="sd">    inference API for prediction. The model on Huggingface needs to be</span>
+<span class="sd">    defined and an authentication token is required. The default model is</span>
+<span class="sd">    PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1. The input</span>
+<span class="sd">    documents for which annotations are to be produced have to be provided</span>
+<span class="sd">    through a pointer to the directory where they are kept. All documents</span>
+<span class="sd">    have to be in BioC formatted XML. It is assumed that input BioC XML</span>
+<span class="sd">    files have their file names starting with a unique ID, e.g. &lt;PMC ID&gt;,</span>
+<span class="sd">    which will be reused to construct the output filename. Suggested naming</span>
+<span class="sd">    convension for input file name is &lt;date&gt;_xml_&lt;unique ID&gt;</span>
+
+<span class="sd">    Input</span>
+
+<span class="sd">    :param xml-dir: directory containing BioC formatted XML files for which</span>
+<span class="sd">                    annotations are to be created; files are expected to</span>
+<span class="sd">                    follow a naming convention of &lt;date&gt;_xml_&lt;unique ID&gt;</span>
+<span class="sd">    :type xml-dir: str()</span>
+
+<span class="sd">    :param model-repo: model repo name on Huggingface, e.g.</span>
+<span class="sd">                       PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1,</span>
+<span class="sd">                       which is the default</span>
+<span class="sd">    :type model-repo: str()</span>
+
+<span class="sd">    :param auth-token: Huggingface token to authenticate into inference API</span>
+<span class="sd">    :type auth-token: str()</span>
+
+<span class="sd">    :param output-dir: full path to output directory; default = current directory</span>
+<span class="sd">    :type output-dir: str()</span>
+
+
+<span class="sd">    Output</span>
+
+<span class="sd">    :return: &lt;unique ID&gt;_&lt;model name&gt;_&lt;date&gt;.xml; XML file with full text for open access</span>
+<span class="sd">            publication in BioC format</span>
+<span class="sd">    :rtype: XML</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
     
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Parsing a list PMC IDs in TXT format to retrieve </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;their associated full text XML by querying NCBI BioNLP API. </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;Returns an XML file in BioC format for each PMC ID if the </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;access for the ID is open.&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;This function contacts a specified model on Huggingface</span>
+<span class="s2">                      through the inference API for prediction. The model on</span>
+<span class="s2">                      Huggingface needs to be defined and an authentication</span>
+<span class="s2">                      token is required. The default model is</span>
+<span class="s2">                      PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1.</span>
+<span class="s2">                      The input documents for which annotations are to be produced</span>
+<span class="s2">                      have to be provided through a pointer to the directory where</span>
+<span class="s2">                      they are kept. All documents have to be in BioC formatted XML.</span>
+<span class="s2">                      It is assumed that input BioC XML files have their file names</span>
+<span class="s2">                      starting with a unique ID, e.g. &lt;PMC ID&gt;, which will be reused</span>
+<span class="s2">                      to construct the output filename. Suggested naming convension</span>
+<span class="s2">                      for input file name is &lt;date&gt;_xml_&lt;unique ID&gt;&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--xml-dir&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;xml_dir&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;A list of input PMC IDs in TXT format&quot;</span><span class="p">,</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Directory containing BioC XML files for annotation with a</span>
+<span class="s2">                               trained model; file names should follow the naming convention</span>
+<span class="s2">                               &lt;date&gt;_xml_&lt;unique ID&gt;&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--model-repo&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1&quot;</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;model_repo&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Huggingface repo id holding a pre-trained model&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Huggingface repo id holding a pre-trained model, e.g.</span>
+<span class="s2">                               PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1,</span>
+<span class="s2">                               which is the default&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--auth-token&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;auth_token&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Huggingface token for authentocation&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Huggingface token for authentication&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--output-dir&quot;</span><span class="p">,</span>

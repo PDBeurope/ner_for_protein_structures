@@ -54,4 +54,5 @@ locally on a MacBook Pro M1 with 16GB RAM running Sonoma 14.1.1.
     ner_for_protein_structures.run_local_inference_for_ner --xml-dir=test/data/not_annotated_BioC_XML/ --model-dir=<full_path_to_model_location> --model-name="bioformer8L_v0.1" --output-dir=test/results/predictions/
 
 .. code-block:: bash
+    
     ner_for_protein_structures.run_local_inference_for_ner --xml-dir=test/data/not_annotated_BioC_XML/ --model-dir=<full_path_to_model_location> --model-name="pubmedbert_v2.1" --output-dir=test/results/predictions/

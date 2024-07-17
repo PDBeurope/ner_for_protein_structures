@@ -29,20 +29,75 @@
           <div class="body" role="main">
             
   <h1>Source code for ner_for_protein_structures.sem_eval.run_semeval_analysis</h1><div class="highlight"><pre>
-<span></span><span class="ch">#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python</span>
-
-<span class="c1"># importing necessary modules/libraries</span>
+<span></span><span class="c1"># importing necessary modules/libraries</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">sem_eval.performance_stats_from_IOB_pred_gt</span> <span class="kn">import</span> <span class="n">semeval_report</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
 <span class="k">def</span> <span class="nf">run_semeval_analysis</span><span class="p">(</span><span class="n">iob_gt</span><span class="p">,</span> <span class="n">iob_ann</span><span class="p">,</span> <span class="n">validate_labels</span><span class="p">,</span> <span class="n">entity_types</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    open the various input files and check they exist; run SemEval evaluation and compare</span>
+<span class="sd">    ground truth annotations in IOB format with manually/automatically annotated text in</span>
+<span class="sd">    IOB format to get annotation statistics and performance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
+        <span class="n">gt_input</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">iob_gt</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">gt_input</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input file found&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
+        <span class="n">ann_input</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">iob_ann</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">ann_input</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No annotated file found&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
+        <span class="n">ent_types</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">entity_types</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">ent_types</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ent_types</span><span class="p">)</span> <span class="k">as</span> <span class="n">ent</span><span class="p">:</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input file with entity types found&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ent_list_clean</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ent_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">e_stripped</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">ent_list_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_stripped</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">semeval_report</span><span class="p">(</span><span class="n">gold_path</span> <span class="o">=</span> <span class="n">gt_input</span><span class="p">,</span> <span class="n">response_path</span> <span class="o">=</span> <span class="n">ann_input</span><span class="p">,</span>
+                       <span class="n">validate_label</span> <span class="o">=</span> <span class="n">validate_labels</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">ent_list_clean</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished evaluation&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get scores&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;_SemEval_report.txt&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not write output&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../functions.html#ner_for_protein_structures.sem_eval.run_semeval_analysis.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function runs the SemEval evaluation script to calculate performance</span>
 <span class="sd">    statistics as precision, recall and F1 measure for annotations coming from</span>
@@ -57,12 +112,12 @@
 
 <span class="sd">    :param ground-truth-IOB: path to IOB formated sentence input of word tokens </span>
 <span class="sd">                             and labels for the ground truth/gold standard data;</span>
-<span class="sd">                             tab-separated .TSV file</span>
+<span class="sd">                             tab-separated .TSV/.CSV file</span>
 <span class="sd">    :type ground-truth-IOB: str</span>
 
 <span class="sd">    :param annotated-IOB: path to IOB formated sentence input of word tokens</span>
 <span class="sd">                          and labels for the predicted/manually created data;</span>
-<span class="sd">                          tab-separated .TSV file</span>
+<span class="sd">                          tab-separated .TSV/.CSV file</span>
 <span class="sd">    :type annotated-IOB: str</span>
 
 <span class="sd">    :param validate-labels: True/False Boulean label on whether or not to check</span>
@@ -86,115 +141,62 @@
 <span class="sd">    :rtype: str</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
-        <span class="n">gt_input</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">iob_gt</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">gt_input</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input file found&quot;</span><span class="p">)</span>
-        <span class="k">pass</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
-        <span class="n">ann_input</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">iob_ann</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">ann_input</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No annotated file found&quot;</span><span class="p">)</span>
-        <span class="k">pass</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
-        <span class="n">ent_types</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">entity_types</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">ent_types</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ent_types</span><span class="p">)</span> <span class="k">as</span> <span class="n">ent</span><span class="p">:</span>
-            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input file with entity types found&quot;</span><span class="p">)</span>
-        <span class="k">pass</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">ent_list_clean</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ent_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">e_stripped</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">ent_list_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e_stripped</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">report</span> <span class="o">=</span> <span class="n">semeval_report</span><span class="p">(</span><span class="n">gold_path</span> <span class="o">=</span> <span class="n">gt_input</span><span class="p">,</span> <span class="n">response_path</span> <span class="o">=</span> <span class="n">ann_input</span><span class="p">,</span>
-                       <span class="n">validate_label</span> <span class="o">=</span> <span class="n">validate_labels</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">ent_list_clean</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished evaluation&quot;</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get scores&quot;</span><span class="p">)</span>
-        <span class="k">pass</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;_SemEval_report.txt&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not write output&quot;</span><span class="p">)</span>
-        <span class="k">pass</span>
-
-
-
-<div class="viewcode-block" id="main">
-<a class="viewcode-back" href="../../../functions.html#ner_for_protein_structures.sem_eval.run_semeval_analysis.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
     
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;This tool runs the SemEval evaluation script to calculate </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;performance statistics as precision, recall and F1 measure </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;for annotations coming from either an automatic system in </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;form of predictions, or as manually created annotations. </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;The details for the evaluation process have been published </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;here: https://aclanthology.org/S13-2056.pdf. Two IOB </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;formatted input files of word tokesn and corresponding </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;labels have to be provided. One of the files represents </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;the ground truth/gold standard to compare against. The </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;other one contains the predicted/manually created annotations.&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;This tool runs the SemEval evaluation script to calculate</span>
+<span class="s2">                      performance statistics as precision, recall and F1 measure</span>
+<span class="s2">                      for annotations coming from either an automatic system in</span>
+<span class="s2">                      form of predictions, or as manually created annotations.</span>
+<span class="s2">                      The details for the evaluation process have been published</span>
+<span class="s2">                      here: https://aclanthology.org/S13-2056.pdf. Two IOB</span>
+<span class="s2">                      formatted input files of word tokesn and corresponding</span>
+<span class="s2">                      labels have to be provided. One of the files represents</span>
+<span class="s2">                      the ground truth/gold standard to compare against. The</span>
+<span class="s2">                      other one contains the predicted/manually created annotations.&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--ground-truth-IOB&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;iob_gt&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;A list of input PMC IDs in TXT format&quot;</span><span class="p">,</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;path to tab-separated ground truth CSV file</span>
+<span class="s2">                               containing sentences and annotations in IOB format&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--annotated-IOB&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;iob_ann&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;path to tab-separated CSV file to compare against</span>
+<span class="s2">                               ground truth containing sentences and annotations</span>
+<span class="s2">                               in IOB format&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--validate-labels&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;validate_labels&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;True/False Boulean label on whether or not to</span>
+<span class="s2">                               check label integrity; default: True&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--entity-types&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;entity_types&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;path to .TXT file containg the entity type</span>
+<span class="s2">                               labels that were used to generate the IOB</span>
+<span class="s2">                               formatted data files&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--output-dir&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;output_dir&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;output directory to write results files to</span>
+<span class="s2">                               default = current directory&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 

@@ -7,6 +7,7 @@ either be downloaded from Huggingface and run locally or can be contacted
 through the Huggingface inference API and run remotely.
 
 .. _models:
+
 Available models
 ----------------
 

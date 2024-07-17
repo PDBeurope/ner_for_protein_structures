@@ -23,7 +23,7 @@ Convert annotations in BioC formatted XML to JSON
 Fetch fulltext, open access publications in BioC formatted XML using PubMedCentral IDs
 --------------------------------------------------------------------------------------
 
-.. autofunction:: ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.main
+.. autofunction:: ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc.main
 
 
 Run NER predictions on BioC formatted XML files with a trained model - locally

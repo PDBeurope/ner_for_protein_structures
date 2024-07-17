@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc &#8212; ner_for_protein_structures 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <script src="../../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc</h1><div class="highlight"><pre>
+<span></span><span class="c1"># importing necessary modules/libraries</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">bioc_xml_tools.europepmc_queries</span> <span class="kn">import</span> <span class="n">fetch_bioc_xml</span>
+
+<span class="k">def</span> <span class="nf">get_bioc_xml_from_pmc</span><span class="p">(</span><span class="n">pmcid_list</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    making a request to open access set at NCBI to retrieve BioC formatted XML</span>
+<span class="sd">    for a given PMC ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ckeck whether the input file (list of PMCIDs) exists</span>
+        <span class="n">input_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pmcid_list</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">input_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No input file found&quot;</span><span class="p">)</span>
+        <span class="k">pass</span>
+    <span class="c1"># open the input file (list of PMCIDs)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">input_list</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of unique entries to fetch full text XML for: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">input_list</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># iterate over list of PMC IDs and make a request to NCBI BioNLP API to get</span>
+    <span class="c1"># the XML text</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">pmcid</span> <span class="ow">in</span> <span class="n">input_list</span><span class="p">:</span>
+        <span class="n">pmcid</span> <span class="o">=</span> <span class="n">pmcid</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># make the request; this returns the full</span>
+        <span class="c1"># text XML where open access is true</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">fetch_bioc_xml</span><span class="p">(</span><span class="n">pmcid</span><span class="p">)</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c1"># create an output filepath and name to write the search results to disk; add time stamp</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;_xml_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pmcid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.xml&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># return an error if there is no open access XML found for a given PMC ID</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get full text XML&quot;</span><span class="p">)</span>
+            <span class="k">pass</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final number of PubMed IDs processed: </span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># return the list of dictionaries</span>
+    <span class="k">return</span>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../functions.html#ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function uses a list of PMC IDs in TXT format as input to query </span>
+<span class="sd">    NCBI BioNLP API and retrieve the full text BioC formated XML for each ID. </span>
+<span class="sd">    This is only possible if a given ID represents an open access publication. </span>
+<span class="sd">    If access is restricted in any way, then the full text can not be retrieved. </span>
+<span class="sd">    The returned XML file contains the publication text formated according to</span>
+<span class="sd">    BioC XML standards as develop by the BioCreative initiative.</span>
+
+<span class="sd">    Input</span>
+
+<span class="sd">    :param pmcid-list: list of PMC IDs representing open access, full text </span>
+<span class="sd">                       publications in PMC; in TXT format</span>
+<span class="sd">    :type pmcid-list: list[str]</span>
+
+<span class="sd">    :param output-dir: full path to output directory; default = current directory</span>
+<span class="sd">    :type output-dir: str</span>
+
+
+<span class="sd">    Output</span>
+
+<span class="sd">    :return: &lt;date&gt;_xml_&lt;PMCID&gt;.xml; XML file with full text for open access</span>
+<span class="sd">            publication in BioC format</span>
+<span class="sd">    :rtype: XML</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+     
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Parsing a list PMC IDs in TXT format to retrieve</span>
+<span class="s2">                      their associated full text XML by querying NCBI BioNLP API.</span>
+<span class="s2">                      Returns an XML file in BioC format for each PMC ID if the</span>
+<span class="s2">                      access for the ID is open.&quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+                        <span class="s2">&quot;--pmcid-list&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;pmcid_list&quot;</span><span class="p">,</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;A list of input PMC IDs in TXT format&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+                        <span class="s2">&quot;--output-dir&quot;</span><span class="p">,</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+                        <span class="n">default</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                        <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;output_dir&quot;</span><span class="p">,</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;output directory to write results files to</span>
+<span class="s2">                               default = current directory&quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># parsing the command line input to make the PDBe query for search and filterterms</span>
+    <span class="n">get_bioc_xml_from_pmc</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">pmcid_list</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">main</span><span class="p">()</span>  
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">ner_for_protein_structures</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conversions.html">Conversion of BioC formatted annotations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../predictions.html">Make predictions on un-annotated BioC XML files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../semeval_stats.html">Calculating performance stats following SemEval procedure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../functions.html">List of functions in the tool collection</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Melanie Vollmar.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

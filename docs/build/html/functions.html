@@ -104,9 +104,35 @@ annotations.json.</p>
 <section id="fetch-fulltext-open-access-publications-in-bioc-formatted-xml-using-pubmedcentral-ids">
 <h2>Fetch fulltext, open access publications in BioC formatted XML using PubMedCentral IDs<a class="headerlink" href="#fetch-fulltext-open-access-publications-in-bioc-formatted-xml-using-pubmedcentral-ids" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.main">
-<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/bioc_xml_retrieval/get_bioc_xml_from_pmc.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.bioc_xml_retrieval.get_bioc_xml_from_pmc.main" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/bioc_xml_tools/get_bioc_xml_from_pmc.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.bioc_xml_tools.get_bioc_xml_from_pmc.main" title="Link to this definition">¶</a></dt>
+<dd><p>This function uses a list of PMC IDs in TXT format as input to query
+NCBI BioNLP API and retrieve the full text BioC formated XML for each ID.
+This is only possible if a given ID represents an open access publication.
+If access is restricted in any way, then the full text can not be retrieved.
+The returned XML file contains the publication text formated according to
+BioC XML standards as develop by the BioCreative initiative.</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pmcid-list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of PMC IDs representing open access, full text
+publications in PMC; in TXT format</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>&lt;date&gt;_xml_&lt;PMCID&gt;.xml; XML file with full text for open access
+publication in BioC format</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>XML</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-locally">
@@ -114,7 +140,43 @@ annotations.json.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ner_for_protein_structures.ner_inference.run_local_inference_for_ner.main">
 <span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.ner_inference.run_local_inference_for_ner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/ner_inference/run_local_inference_for_ner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.ner_inference.run_local_inference_for_ner.main" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function annotates BioC formatted XML files of publications for
+named entities using a trained model stored locally. The input
+documents for which annotations are to be produced have to be provided
+through a pointer to the directory where they are kept. All documents
+have to be in BioC formatted XML. It is assumed that input BioC XML
+files have their file names starting with a unique ID, e.g. &lt;PMC ID&gt;,
+which will be reused to construct the output filename. Suggested naming
+convension for input file name is &lt;date&gt;_xml_&lt;unique ID&gt;. A pointer to
+the model locally has to be provided. The model directory name is
+assumed to match the one for the remote location on Huggingface,
+e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1.</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xml-dir</strong> (<em>str</em><em>(</em><em>)</em>) – directory containing BioC formatted XML files for which
+annotations are to be created; files are expected to
+follow a naming convention of &lt;date&gt;_xml_&lt;unique ID&gt;</p></li>
+<li><p><strong>model-dir</strong> (<em>str</em><em>(</em><em>)</em>) – directory containing a trained model for inference;
+directory name is assumed to match the remote location
+on Huggingface, e.g. BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1</p></li>
+<li><p><strong>model-name</strong> (<em>str</em><em>(</em><em>)</em>) – model name shorthand to be used as annotator</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em><em>(</em><em>)</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>&lt;unique ID&gt;_&lt;model name&gt;_&lt;date&gt;.xml; XML file with full text for open access
+publication in BioC format</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>XML</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="run-ner-predictions-on-bioc-formatted-xml-files-with-a-trained-model-remotely">
@@ -122,7 +184,42 @@ annotations.json.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.main">
 <span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/ner_inference/run_hf_inference_for_ner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.ner_inference.run_hf_inference_for_ner.main" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function contacts a specified model on Huggingface through the
+inference API for prediction. The model on Huggingface needs to be
+defined and an authentication token is required. The default model is
+PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1. The input
+documents for which annotations are to be produced have to be provided
+through a pointer to the directory where they are kept. All documents
+have to be in BioC formatted XML. It is assumed that input BioC XML
+files have their file names starting with a unique ID, e.g. &lt;PMC ID&gt;,
+which will be reused to construct the output filename. Suggested naming
+convension for input file name is &lt;date&gt;_xml_&lt;unique ID&gt;</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xml-dir</strong> (<em>str</em><em>(</em><em>)</em>) – directory containing BioC formatted XML files for which
+annotations are to be created; files are expected to
+follow a naming convention of &lt;date&gt;_xml_&lt;unique ID&gt;</p></li>
+<li><p><strong>model-repo</strong> (<em>str</em><em>(</em><em>)</em>) – model repo name on Huggingface, e.g.
+PDBEurope/BiomedNLP-PubMedBERT-ProteinStructure-NER-v2.1,
+which is the default</p></li>
+<li><p><strong>auth-token</strong> (<em>str</em><em>(</em><em>)</em>) – Huggingface token to authenticate into inference API</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em><em>(</em><em>)</em>) – full path to output directory; default = current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>&lt;unique ID&gt;_&lt;model name&gt;_&lt;date&gt;.xml; XML file with full text for open access
+publication in BioC format</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>XML</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-semeval-calculations">
@@ -206,6 +303,52 @@ testing set</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ner_for_protein_structures.sem_eval.run_semeval_analysis.main">
 <span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.sem_eval.run_semeval_analysis.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/sem_eval/run_semeval_analysis.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.sem_eval.run_semeval_analysis.main" title="Link to this definition">¶</a></dt>
+<dd><p>This function runs the SemEval evaluation script to calculate performance
+statistics as precision, recall and F1 measure for annotations coming from
+either an automatic system in form of predictions, or as manually created
+annotations. The details for the evaluation process have been published here:
+<a class="reference external" href="https://aclanthology.org/S13-2056.pdf">https://aclanthology.org/S13-2056.pdf</a>. Two IOB formatted input files of
+word tokesn and corresponding labels have to be provided. One of the files
+represents the ground truth/gold standard to compare against. The other one
+contains the predicted/manually created annotations.</p>
+<p>Input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ground-truth-IOB</strong> (<em>str</em>) – path to IOB formated sentence input of word tokens
+and labels for the ground truth/gold standard data;
+tab-separated .TSV/.CSV file</p></li>
+<li><p><strong>annotated-IOB</strong> (<em>str</em>) – path to IOB formated sentence input of word tokens
+and labels for the predicted/manually created data;
+tab-separated .TSV/.CSV file</p></li>
+<li><p><strong>validate-labels</strong> (<em>Boulean</em>) – True/False Boulean label on whether or not to check
+label integrity; default: True</p></li>
+<li><p><strong>entity-types</strong> (<em>str</em>) – path to .TXT file containg the entity type labels that
+were used to generate the IOB formatted data files</p></li>
+<li><p><strong>output-dir</strong> (<em>str</em>) – full path to output directory; default: current directory</p></li>
+</ul>
+</dd>
+</dl>
+<p>Output</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>&lt;current date&gt;_SemEval_report.txt; text file containing the score
+report for matches in annotations between the ground truth/gold
+standard and the predicted/manually created data following the
+SemEval scoring procedure.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="converting-europepmc-jats-style-xml-to-bioc-xml">
+<h2>Converting EuropePMC/JATS style XML to BioC XML<a class="headerlink" href="#converting-europepmc-jats-style-xml-to-bioc-xml" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ner_for_protein_structures.bioc_xml_tools.pmcxml_to_biocxml.main">
+<span class="sig-prename descclassname"><span class="pre">ner_for_protein_structures.bioc_xml_tools.pmcxml_to_biocxml.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ner_for_protein_structures/bioc_xml_tools/pmcxml_to_biocxml.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ner_for_protein_structures.bioc_xml_tools.pmcxml_to_biocxml.main" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -246,6 +389,7 @@ testing set</p>
 <li class="toctree-l2"><a class="reference internal" href="#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-semeval-calculations">Processing BioC formatted XML files to turn annotations into IOB format for SemEval calculations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#processing-bioc-formatted-xml-files-to-turn-annotations-into-iob-format-for-model-training">Processing BioC formatted XML files to turn annotations into IOB format for model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-semeval-to-calculate-performance-statistics">Running SemEval to calculate performance statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#converting-europepmc-jats-style-xml-to-bioc-xml">Converting EuropePMC/JATS style XML to BioC XML</a></li>
 </ul>
 </li>
 </ul>

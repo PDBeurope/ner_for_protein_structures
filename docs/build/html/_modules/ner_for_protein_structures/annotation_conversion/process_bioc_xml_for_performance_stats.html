@@ -29,9 +29,7 @@
           <div class="body" role="main">
             
   <h1>Source code for ner_for_protein_structures.annotation_conversion.process_bioc_xml_for_performance_stats</h1><div class="highlight"><pre>
-<span></span><span class="ch">#! /Users/melaniev/Documents/code/ner_for_protein_structure/ner_venv/bin/python</span>
-
-<span class="c1"># importing necessary modules/libraries</span>
+<span></span><span class="c1"># importing necessary modules/libraries</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -40,17 +38,13 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
-
 <span class="k">def</span> <span class="nf">process_bioc_xml_file</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">annotator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    opening a BioC XML file with annotations and extracting all the annotations</span>
 <span class="sd">    and their corresponding sentences in a document; alternatively add identifiers</span>
 <span class="sd">    for individual annotators; convert the sentences and their annottaions to IOB</span>
 <span class="sd">    format for analysis with SemEval script</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">non_overlap</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">non_overlap_counter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">progress_bar_pub</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">)),</span>
@@ -59,7 +53,7 @@
         <span class="n">prev_sent_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xml&quot;</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing annotated publication </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing annotated publication </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">input</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bioc_xml_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
             <span class="n">text_list</span><span class="p">,</span> <span class="n">anno_list</span> <span class="o">=</span> <span class="n">get_text_annos_from_xml_for_selected_sections</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">annotator</span><span class="p">)</span>
@@ -105,46 +99,33 @@
                             <span class="k">elif</span> <span class="n">found_span</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
                                 <span class="n">st_ann_sp_new</span> <span class="o">=</span> <span class="n">st_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
                                 <span class="n">en_ann_sp_new</span> <span class="o">=</span> <span class="n">en_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
-                                <span class="c1"># logger.info(f&quot;Reset annotation span to eliminate leading white space for annotation:&quot;)</span>
-                                <span class="c1"># cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)</span>
-                                <span class="c1"># logger.info(cur_anno)</span>
                                 <span class="n">anno_list_ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">st_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">en_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">ann</span><span class="p">,</span> <span class="n">ann_type</span><span class="p">]</span>
                                 <span class="n">non_overlap</span><span class="p">[</span><span class="n">snt_text</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anno_list_ext</span><span class="p">)</span>
                                 <span class="n">current_non_overlap_counter</span> <span class="o">=</span> <span class="n">current_non_overlap_counter</span> <span class="o">+</span> <span class="mi">1</span>
                             <span class="k">elif</span> <span class="n">found_span</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">):</span>
                                 <span class="n">st_ann_sp_new</span> <span class="o">=</span> <span class="n">st_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
                                 <span class="n">en_ann_sp_new</span> <span class="o">=</span> <span class="n">en_ann_sp</span> <span class="o">+</span> <span class="mi">1</span>
-                                <span class="c1"># logger.info(f&quot;Reset annotation span to eliminate leading parenthesis for annotation:&quot;)</span>
-                                <span class="c1"># cur_anno = (snt_text[st_ann_sp_new-st_snt_sp:en_ann_sp_new-st_snt_sp], ann)</span>
-                                <span class="c1"># logger.info(cur_anno)</span>
                                 <span class="n">anno_list_ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">st_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">en_ann_sp_new</span><span class="o">-</span><span class="n">st_snt_sp</span><span class="p">,</span> <span class="n">ann</span><span class="p">,</span> <span class="n">ann_type</span><span class="p">]</span>
                                 <span class="n">non_overlap</span><span class="p">[</span><span class="n">snt_text</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anno_list_ext</span><span class="p">)</span>
                                 <span class="n">current_non_overlap_counter</span> <span class="o">=</span> <span class="n">current_non_overlap_counter</span> <span class="o">+</span> <span class="mi">1</span>
                             <span class="k">else</span><span class="p">:</span>
-                                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not resolve annotation&quot;</span><span class="p">)</span>
-                                <span class="c1"># cur_anno = (found_span, ann)</span>
-                                <span class="c1"># logger.info(cur_anno)</span>
-                                <span class="c1"># logger.info(f&quot;Start found for annotation span {st_ann_sp}&quot;)</span>
-                                <span class="c1"># logger.info(f&quot;Start found for sentence span {st_snt_sp}&quot;)</span>
-                                <span class="c1"># logger.info(f&quot;End found for annotation span {en_ann_sp}&quot;)</span>
-                                <span class="c1"># logger.info(f&quot;End found for sentence span {en_snt_sp}&quot;)</span>
+                                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not resolve annotation&quot;</span><span class="p">)</span>
                                 <span class="k">continue</span>
 
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of annotations after processing: </span><span class="si">{</span><span class="n">current_non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of annotations after processing: </span><span class="si">{</span><span class="n">current_non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         
         <span class="n">cur_doc_sent</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span> <span class="o">-</span> <span class="n">prev_sent_len</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of sentences after processing: </span><span class="si">{</span><span class="n">cur_doc_sent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of sentences after processing: </span><span class="si">{</span><span class="n">cur_doc_sent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">progress_bar_pub</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
     <span class="c1"># get all the non-overlapping annotations</span>
     <span class="n">len_non_overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of sentences with annotations across all publications: </span><span class="si">{</span><span class="n">len_non_overlap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of sentences with annotations across all publications: </span><span class="si">{</span><span class="n">len_non_overlap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">non_overlap</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">anno_all_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="n">non_overlap_counter</span> <span class="o">=</span> <span class="n">non_overlap_counter</span> <span class="o">+</span> <span class="n">anno_all_length</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of annotations across all publications: </span><span class="si">{</span><span class="n">non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of annotations across all publications: </span><span class="si">{</span><span class="n">non_overlap_counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">full_out_path</span> <span class="o">=</span> <span class="n">output_dir</span>
     <span class="n">convert_all_to_IOB</span><span class="p">(</span><span class="n">non_overlap</span><span class="p">,</span> <span class="n">full_out_path</span><span class="p">)</span>
@@ -187,14 +168,14 @@
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
     
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;This script extracts the annotations from a BioC formatted </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;XML file along with the sentence they belong to and converts </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;everything into IOB formatted sentences with annotations; </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;IOB formatted annotations serve as input for calculating </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;performance statistics following the SemEval procedure; </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;optionally, an &#39;annotator&#39; can be selected for later </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;calculation of individual performance for either a human </span><span class="se">\n</span><span class="s2">&quot;</span>
-                      <span class="s2">&quot;annotator or predictions from a trained model&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;This script extracts the annotations from a BioC formatted</span>
+<span class="s2">                      XML file along with the sentence they belong to and converts</span>
+<span class="s2">                      everything into IOB formatted sentences with annotations;</span>
+<span class="s2">                      IOB formatted annotations serve as input for calculating</span>
+<span class="s2">                      performance statistics following the SemEval procedure;</span>
+<span class="s2">                      optionally, an &#39;annotator&#39; can be selected for later</span>
+<span class="s2">                      calculation of individual performance for either a human</span>
+<span class="s2">                      annotator or predictions from a trained model&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--bioc-xml-dir&quot;</span><span class="p">,</span>
@@ -208,16 +189,16 @@
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;output_dir&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;output directory to write results files to; </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = current directory&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;output directory to write results files to;</span>
+<span class="s2">                               default = current directory&quot;&quot;&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
                         <span class="s2">&quot;--annotator&quot;</span><span class="p">,</span>
                         <span class="nb">type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">dest</span> <span class="o">=</span> <span class="s2">&quot;annotator&quot;</span><span class="p">,</span>
-                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;name of annotator to use for getting annotation stats for; </span><span class="se">\n</span><span class="s2">&quot;</span>
-                               <span class="s2">&quot;default = None&quot;</span>
+                        <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;name of annotator to use for getting annotation stats for;</span>
+<span class="s2">                               default = None&quot;&quot;&quot;</span>
     <span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
