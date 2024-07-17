@@ -10,7 +10,7 @@ TeamTat (https://www.teamtat.org/), into other formats.
 
 For more details read the documentation here: https://ner-for-protein-structures.readthedocs.io/en/latest/
 
-## Instalation
+## Installation
 Clone the repository from the [source code](https://github.com/PDBeurope/ner_for_protein_structures.git) on Github:
 
 ```bash
@@ -34,7 +34,7 @@ Next, install all the necessary dependencies using the provided requirements.txt
 pip install -r requirements.txt
 ```
 
-To be able to use some of the NLP tools install the scientific, english language model
+To be able to use some of the NLP tools install the scientific, English language model
 ```bash
 pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_sm-0.5.3.tar.gz
 ```
@@ -65,6 +65,12 @@ git clone https://huggingface.co/PDBEurope/Bioformer8L-ProteinStructure-NER-v0.1
 Alternatively, the models can be accessed through Huggingface's inference API.
 This option does require a Huggingface account and an authentication token. The
 details on how to register and how to set up the token can be found on [Huggingface](https://huggingface.co/)
+
+## Annotation handbook and TeamTat user guide
+
+The annotation handbook with details on how to annotate different entity types
+and the user guide on the annotation tool TeamTat can be found here: [Annotation handbook and user guide](docs/user_guide_and_annotation_handbook_to_Sci_Data_v2.pdf)
+
 
 ## Support
 For any feedback, help, bug report please email to:
