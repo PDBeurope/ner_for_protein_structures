@@ -89,5 +89,5 @@ The annotation handbook with details on how to annotate different entity types
 and the user guide on the annotation tool TeamTat have been made available and
 can be found here:
 
-:download:`Annotation handbook and user guide <../user_guide_and_annotation_handbook_to_Sci_Data_v2.pdf>`.
+:download:`Annotation handbook and user guide <../user_guide_and_annotation_handbook_to_Sci_Data_v2.1.pdf>`.
 
