@@ -69,7 +69,7 @@ details on how to register and how to set up the token can be found on [Huggingf
 ## Annotation handbook and TeamTat user guide
 
 The annotation handbook with details on how to annotate different entity types
-and the user guide on the annotation tool TeamTat can be found here: [Annotation handbook and user guide](docs/user_guide_and_annotation_handbook_to_Sci_Data_v2.pdf)
+and the user guide on the annotation tool TeamTat can be found here: [Annotation handbook and user guide](docs/user_guide_and_annotation_handbook_to_Sci_Data_v2.1.pdf)
 
 
 ## Support

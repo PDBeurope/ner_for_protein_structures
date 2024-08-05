@@ -44,4 +44,5 @@ been specified, the file will be written to the current directory.
 .. code-block:: bash
 
     ner_for_protein_structures.run_semeval_analysis --ground-truth-IOB=test/data/SemEval/PMC4772114_ground_truth_all_IOB.tsv --annotated-IOB=test/data/SemEval/PMC4772114_autoannotator_v1.2_all_IOB.tsv --validate-labels="True" --entity-types=test/data/SemEval/entity_types.txt  --output-dir=test/results/SemEval_analysis/
+    
 
