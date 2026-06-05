@@ -64,7 +64,7 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.6
 sphinxcontrib-serializinghtml==1.1.9
 zipp==3.17.0
-lxml==4.9.3
+lxml==6.1.0
 filelock==3.13.1
 fsspec==2023.10.0
 #huggingface_hub==0.18.0
